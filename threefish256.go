@@ -31,7 +31,7 @@ func New256(key, tweak []byte) (cipher.Block, error) {
 	c := new(cipher256)
 
 	// Load and extend the tweak value
-	if err := calculateTweak(c.t, tweak); err != nil {
+	if err := calculateTweak(&c.t, tweak); err != nil {
 		return nil, err
 	}
 
