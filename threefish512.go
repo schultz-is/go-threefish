@@ -44,7 +44,7 @@ func New512(key, tweak []byte) (cipher.Block, error) {
 	}
 
 	// Calculate the key schedule
-	for s := 0; s < numRounds512/4; s++ {
+	for s := 0; s <= numRounds512/4; s++ {
 		for i := 0; i < numWords512; i++ {
 			c.ks[s][i] = k[(s+i)%(numWords512+1)]
 			switch i {
