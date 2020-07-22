@@ -144,7 +144,6 @@ func TestThreefish256(t *testing.T) {
 
 			block.Encrypt(ciphertext, message)
 			if hex.EncodeToString(ciphertext) != "e0d091ff0eea8fdfc98192e62ed80ad59d865d08588df476657056b5955e97df" {
-				t.Log(hex.EncodeToString(ciphertext))
 				t.Fatal("ciphertext does not match expected value")
 			}
 
