@@ -154,3 +154,36 @@ func TestThreefish256(t *testing.T) {
 		},
 	)
 }
+
+func BenchmarkThreefish256(b *testing.B) {
+	key := make([]byte, blockSize256)
+	tweak := make([]byte, tweakSize)
+	message := make([]byte, blockSize256)
+
+	block, err := New256(key, tweak)
+	if err != nil {
+		b.Fatalf("failed to create cipher with error: %s", err)
+	}
+
+	b.Run(
+		"encrypt",
+		func(b *testing.B) {
+			ciphertext := make([]byte, blockSize256)
+
+			for n := 0; n < b.N; n++ {
+				block.Encrypt(ciphertext, message)
+			}
+		},
+	)
+
+	b.Run(
+		"decrypt",
+		func(b *testing.B) {
+			ciphertext := make([]byte, blockSize256)
+
+			for n := 0; n < b.N; n++ {
+				block.Decrypt(ciphertext, ciphertext)
+			}
+		},
+	)
+}
