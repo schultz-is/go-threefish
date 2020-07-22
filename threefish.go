@@ -34,3 +34,16 @@ type TweakSizeError struct{}
 func (e TweakSizeError) Error() string {
 	return fmt.Sprintf("threefish: tweak size must be %d bytes", tweakSize)
 }
+
+// calculateTweak loads a tweak value from src and extends it into dst.
+func calculateTweak(dst [(tweakSize / 8) + 1]uint64, src []byte) error {
+	if len(src) != tweakSize {
+		return new(TweakSizeError)
+	}
+
+	dst[0] = loadWord(src[0:8])
+	dst[1] = loadWord(src[8:16])
+	dst[2] = dst[0] ^ dst[1]
+
+	return nil
+}

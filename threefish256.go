@@ -28,25 +28,20 @@ func New256(key, tweak []byte) (cipher.Block, error) {
 		return nil, KeySizeError(blockSize256)
 	}
 
-	// Length check the provided tweak
-	if len(tweak) != tweakSize {
-		return nil, TweakSizeError{}
-	}
-
 	c := new(cipher256)
 
-	// Set tweak value
-	c.t[0] = loadWord(tweak[0:8])
-	c.t[1] = loadWord(tweak[8:16])
-	c.t[2] = c.t[0] ^ c.t[1]
+	// Load and extend the tweak value
+	if err := calculateTweak(c.t, tweak); err != nil {
+		return nil, err
+	}
 
 	// Load and extend key
-	k := [numWords256 + 1]uint64{}
-	k[0] = loadWord(key[0:8])
-	k[1] = loadWord(key[8:16])
-	k[2] = loadWord(key[16:24])
-	k[3] = loadWord(key[24:32])
-	k[4] = c240 ^ k[0] ^ k[1] ^ k[2] ^ k[3]
+	k := new([numWords256 + 1]uint64)
+	k[numWords256] = c240
+	for i := 0; i < numWords256; i++ {
+		k[i] = loadWord(key[i*8 : (i+1)*8])
+		k[numWords256] ^= k[i]
+	}
 
 	// Calculate the key schedule
 	for s := 0; s <= numRounds256/4; s++ {
@@ -66,13 +61,13 @@ func New256(key, tweak []byte) (cipher.Block, error) {
 	return c, nil
 }
 
-// BlockSize returns the block size of a 256-bit cipher..
+// BlockSize returns the block size of a 256-bit cipher.
 func (c *cipher256) BlockSize() int { return blockSize256 }
 
 // Encrypt loads plaintext from src, encrypts it, and stores it in dst.
 func (c *cipher256) Encrypt(dst, src []byte) {
 	// Load the input
-	in := [numWords256]uint64{}
+	in := new([numWords256]uint64)
 	in[0] = loadWord(src[0:8])
 	in[1] = loadWord(src[8:16])
 	in[2] = loadWord(src[16:24])
@@ -159,7 +154,7 @@ func (c *cipher256) Encrypt(dst, src []byte) {
 // Decrypt loads ciphertext from src, decrypts it, and stores it in dst.
 func (c *cipher256) Decrypt(dst, src []byte) {
 	// Load the ciphertext
-	ct := [numWords256]uint64{}
+	ct := new([numWords256]uint64)
 	ct[0] = loadWord(src[0:8])
 	ct[1] = loadWord(src[8:16])
 	ct[2] = loadWord(src[16:24])
