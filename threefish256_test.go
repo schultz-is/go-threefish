@@ -172,6 +172,7 @@ func BenchmarkThreefish256(b *testing.B) {
 
 			for n := 0; n < b.N; n++ {
 				block.Encrypt(ciphertext, message)
+				b.SetBytes(blockSize256)
 			}
 		},
 	)
@@ -183,6 +184,7 @@ func BenchmarkThreefish256(b *testing.B) {
 
 			for n := 0; n < b.N; n++ {
 				block.Decrypt(ciphertext, ciphertext)
+				b.SetBytes(blockSize256)
 			}
 		},
 	)

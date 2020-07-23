@@ -114,11 +114,11 @@ go tool pprof mem.prof
 ### 2019 MacBook Pro 2.3GHz Intel i9
 
 ```console
-name                      time/op
-Threefish256/encrypt-16   112ns ± 0%
-Threefish256/decrypt-16   140ns ± 0%
-Threefish512/encrypt-16   298ns ± 0%
-Threefish512/decrypt-16   271ns ± 0%
-Threefish1024/encrypt-16  734ns ± 0%
-Threefish1024/decrypt-16  681ns ± 0%
+name                      time/op     speed
+Threefish256/encrypt-16   124ns ± 0%  259MB/s ± 0%
+Threefish256/decrypt-16   156ns ± 0%  206MB/s ± 0%
+Threefish512/encrypt-16   338ns ± 0%  189MB/s ± 0%
+Threefish512/decrypt-16   310ns ± 0%  206MB/s ± 0%
+Threefish1024/encrypt-16  804ns ± 0%  159MB/s ± 0%
+Threefish1024/decrypt-16  778ns ± 0%  165MB/s ± 0%
 ```
