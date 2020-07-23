@@ -108,3 +108,17 @@ make benchmark
 go tool pprof cpu.prof
 go tool pprof mem.prof
 ```
+
+## Performance
+
+### 2019 MacBook Pro 2.3GHz Intel i9
+
+```console
+name                      time/op
+Threefish256/encrypt-16   112ns ± 0%
+Threefish256/decrypt-16   140ns ± 0%
+Threefish512/encrypt-16   298ns ± 0%
+Threefish512/decrypt-16   271ns ± 0%
+Threefish1024/encrypt-16  734ns ± 0%
+Threefish1024/decrypt-16  681ns ± 0%
+```
