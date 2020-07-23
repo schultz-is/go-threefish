@@ -1,5 +1,6 @@
 # go-threefish
 
+![Tests](https://github.com/schultz-is/go-threefish/workflows/Tests/badge.svg)
 [![GoDoc](https://godoc.org/github.com/schultz-is/go-threefish?status.svg)](https://pkg.go.dev/github.com/schultz-is/go-threefish)
 [![Go Report Card](https://goreportcard.com/badge/github.com/schultz-is/go-threefish)](https://goreportcard.com/report/github.com/schultz-is/go-threefish)
 [![License](https://img.shields.io/github/license/schultz-is/go-threefish)](./LICENSE)
