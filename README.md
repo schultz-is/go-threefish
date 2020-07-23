@@ -74,7 +74,7 @@ func main() {
 	}
 
 	// When using CBC mode, the IV needs to be unique but does not need to be
-	// secure. For this reason, it can be prepend the ciphertext with it.
+	// secure. For this reason, it can be prepended to the ciphertext.
 	ciphertext := make([]byte, block.BlockSize()+len(message))
 	iv := ciphertext[:block.BlockSize()]
 	_, err = rand.Read(iv)
