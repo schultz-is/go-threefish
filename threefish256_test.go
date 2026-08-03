@@ -155,6 +155,71 @@ func TestThreefish256(t *testing.T) {
 	)
 }
 
+func TestThreefish256Panics(t *testing.T) {
+	key := make([]byte, blockSize256)
+	tweak := make([]byte, tweakSize)
+
+	block, err := New256(key, tweak)
+	if err != nil {
+		t.Fatalf("failed to create cipher with error: %s", err)
+	}
+
+	full := make([]byte, blockSize256)
+	short := make([]byte, blockSize256-1)
+
+	cases := []struct {
+		name string
+		fn   func()
+	}{
+		{"encrypt short src", func() { block.Encrypt(full, short) }},
+		{"encrypt short dst", func() { block.Encrypt(short, full) }},
+		{"decrypt short src", func() { block.Decrypt(full, short) }},
+		{"decrypt short dst", func() { block.Decrypt(short, full) }},
+		{
+			"encrypt inexact overlap",
+			func() {
+				buf := make([]byte, blockSize256+1)
+				block.Encrypt(buf[0:blockSize256], buf[1:blockSize256+1])
+			},
+		},
+		{
+			"decrypt inexact overlap",
+			func() {
+				buf := make([]byte, blockSize256+1)
+				block.Decrypt(buf[0:blockSize256], buf[1:blockSize256+1])
+			},
+		},
+	}
+	for _, c := range cases {
+		t.Run(
+			c.name,
+			func(t *testing.T) {
+				defer func() {
+					if recover() == nil {
+						t.Fatal("expected a panic but none occurred")
+					}
+				}()
+				c.fn()
+			},
+		)
+	}
+
+	// Exact overlap (in-place operation) must remain allowed.
+	t.Run(
+		"in-place is allowed",
+		func(t *testing.T) {
+			defer func() {
+				if r := recover(); r != nil {
+					t.Fatalf("in-place operation should not panic, got: %v", r)
+				}
+			}()
+			buf := make([]byte, blockSize256)
+			block.Encrypt(buf, buf)
+			block.Decrypt(buf, buf)
+		},
+	)
+}
+
 func BenchmarkThreefish256(b *testing.B) {
 	key := make([]byte, blockSize256)
 	tweak := make([]byte, tweakSize)
