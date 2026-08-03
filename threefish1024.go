@@ -66,6 +66,16 @@ func (c *cipher1024) BlockSize() int { return blockSize1024 }
 
 // Encrypt loads plaintext from src, encrypts it, and stores it in dst.
 func (c *cipher1024) Encrypt(dst, src []byte) {
+	if len(src) < blockSize1024 {
+		panic("threefish: input not full block")
+	}
+	if len(dst) < blockSize1024 {
+		panic("threefish: output not full block")
+	}
+	if inexactOverlap(dst[:blockSize1024], src[:blockSize1024]) {
+		panic("threefish: invalid buffer overlap")
+	}
+
 	// Load the input
 	in := new([numWords1024]uint64)
 	in[0] = loadWord(src[0:8])
@@ -317,6 +327,16 @@ func (c *cipher1024) Encrypt(dst, src []byte) {
 
 // Decrypt loads ciphertext from src, decrypts it, and stores it in dst.
 func (c *cipher1024) Decrypt(dst, src []byte) {
+	if len(src) < blockSize1024 {
+		panic("threefish: input not full block")
+	}
+	if len(dst) < blockSize1024 {
+		panic("threefish: output not full block")
+	}
+	if inexactOverlap(dst[:blockSize1024], src[:blockSize1024]) {
+		panic("threefish: invalid buffer overlap")
+	}
+
 	// Load the ciphertext
 	ct := new([numWords1024]uint64)
 	ct[0] = loadWord(src[0:8])
