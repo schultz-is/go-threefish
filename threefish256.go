@@ -78,88 +78,88 @@ func (c *cipher256) Encrypt(dst, src []byte) {
 	}
 
 	// Load the input
-	in := new([numWords256]uint64)
-	in[0] = loadWord(src[0:8])
-	in[1] = loadWord(src[8:16])
-	in[2] = loadWord(src[16:24])
-	in[3] = loadWord(src[24:32])
+	var b0, b1, b2, b3 uint64
+	b0 = loadWord(src[0:8])
+	b1 = loadWord(src[8:16])
+	b2 = loadWord(src[16:24])
+	b3 = loadWord(src[24:32])
 
 	// Perform encryption rounds
 	for d := 0; d < numRounds256; d += 8 {
 		// Add round key
-		in[0] += c.ks[d/4][0]
-		in[1] += c.ks[d/4][1]
-		in[2] += c.ks[d/4][2]
-		in[3] += c.ks[d/4][3]
+		b0 += c.ks[d/4][0]
+		b1 += c.ks[d/4][1]
+		b2 += c.ks[d/4][2]
+		b3 += c.ks[d/4][3]
 
 		// Four rounds of mix and permute
-		in[0] += in[1]
-		in[1] = bits.RotateLeft64(in[1], 14) ^ in[0]
-		in[2] += in[3]
-		in[3] = bits.RotateLeft64(in[3], 16) ^ in[2]
-		in[1], in[3] = in[3], in[1]
+		b0 += b1
+		b1 = bits.RotateLeft64(b1, 14) ^ b0
+		b2 += b3
+		b3 = bits.RotateLeft64(b3, 16) ^ b2
+		b1, b3 = b3, b1
 
-		in[0] += in[1]
-		in[1] = bits.RotateLeft64(in[1], 52) ^ in[0]
-		in[2] += in[3]
-		in[3] = bits.RotateLeft64(in[3], 57) ^ in[2]
-		in[1], in[3] = in[3], in[1]
+		b0 += b1
+		b1 = bits.RotateLeft64(b1, 52) ^ b0
+		b2 += b3
+		b3 = bits.RotateLeft64(b3, 57) ^ b2
+		b1, b3 = b3, b1
 
-		in[0] += in[1]
-		in[1] = bits.RotateLeft64(in[1], 23) ^ in[0]
-		in[2] += in[3]
-		in[3] = bits.RotateLeft64(in[3], 40) ^ in[2]
-		in[1], in[3] = in[3], in[1]
+		b0 += b1
+		b1 = bits.RotateLeft64(b1, 23) ^ b0
+		b2 += b3
+		b3 = bits.RotateLeft64(b3, 40) ^ b2
+		b1, b3 = b3, b1
 
-		in[0] += in[1]
-		in[1] = bits.RotateLeft64(in[1], 5) ^ in[0]
-		in[2] += in[3]
-		in[3] = bits.RotateLeft64(in[3], 37) ^ in[2]
-		in[1], in[3] = in[3], in[1]
+		b0 += b1
+		b1 = bits.RotateLeft64(b1, 5) ^ b0
+		b2 += b3
+		b3 = bits.RotateLeft64(b3, 37) ^ b2
+		b1, b3 = b3, b1
 
 		// Add round key
-		in[0] += c.ks[(d/4)+1][0]
-		in[1] += c.ks[(d/4)+1][1]
-		in[2] += c.ks[(d/4)+1][2]
-		in[3] += c.ks[(d/4)+1][3]
+		b0 += c.ks[(d/4)+1][0]
+		b1 += c.ks[(d/4)+1][1]
+		b2 += c.ks[(d/4)+1][2]
+		b3 += c.ks[(d/4)+1][3]
 
 		// Four rounds of mix and permute
-		in[0] += in[1]
-		in[1] = bits.RotateLeft64(in[1], 25) ^ in[0]
-		in[2] += in[3]
-		in[3] = bits.RotateLeft64(in[3], 33) ^ in[2]
-		in[1], in[3] = in[3], in[1]
+		b0 += b1
+		b1 = bits.RotateLeft64(b1, 25) ^ b0
+		b2 += b3
+		b3 = bits.RotateLeft64(b3, 33) ^ b2
+		b1, b3 = b3, b1
 
-		in[0] += in[1]
-		in[1] = bits.RotateLeft64(in[1], 46) ^ in[0]
-		in[2] += in[3]
-		in[3] = bits.RotateLeft64(in[3], 12) ^ in[2]
-		in[1], in[3] = in[3], in[1]
+		b0 += b1
+		b1 = bits.RotateLeft64(b1, 46) ^ b0
+		b2 += b3
+		b3 = bits.RotateLeft64(b3, 12) ^ b2
+		b1, b3 = b3, b1
 
-		in[0] += in[1]
-		in[1] = bits.RotateLeft64(in[1], 58) ^ in[0]
-		in[2] += in[3]
-		in[3] = bits.RotateLeft64(in[3], 22) ^ in[2]
-		in[1], in[3] = in[3], in[1]
+		b0 += b1
+		b1 = bits.RotateLeft64(b1, 58) ^ b0
+		b2 += b3
+		b3 = bits.RotateLeft64(b3, 22) ^ b2
+		b1, b3 = b3, b1
 
-		in[0] += in[1]
-		in[1] = bits.RotateLeft64(in[1], 32) ^ in[0]
-		in[2] += in[3]
-		in[3] = bits.RotateLeft64(in[3], 32) ^ in[2]
-		in[1], in[3] = in[3], in[1]
+		b0 += b1
+		b1 = bits.RotateLeft64(b1, 32) ^ b0
+		b2 += b3
+		b3 = bits.RotateLeft64(b3, 32) ^ b2
+		b1, b3 = b3, b1
 	}
 
 	// Add the final round key
-	in[0] += c.ks[numRounds256/4][0]
-	in[1] += c.ks[numRounds256/4][1]
-	in[2] += c.ks[numRounds256/4][2]
-	in[3] += c.ks[numRounds256/4][3]
+	b0 += c.ks[numRounds256/4][0]
+	b1 += c.ks[numRounds256/4][1]
+	b2 += c.ks[numRounds256/4][2]
+	b3 += c.ks[numRounds256/4][3]
 
 	// Store ciphertext in destination
-	storeWord(dst[0:8], in[0])
-	storeWord(dst[8:16], in[1])
-	storeWord(dst[16:24], in[2])
-	storeWord(dst[24:32], in[3])
+	storeWord(dst[0:8], b0)
+	storeWord(dst[8:16], b1)
+	storeWord(dst[16:24], b2)
+	storeWord(dst[24:32], b3)
 }
 
 // Decrypt loads ciphertext from src, decrypts it, and stores it in dst.
@@ -175,86 +175,86 @@ func (c *cipher256) Decrypt(dst, src []byte) {
 	}
 
 	// Load the ciphertext
-	ct := new([numWords256]uint64)
-	ct[0] = loadWord(src[0:8])
-	ct[1] = loadWord(src[8:16])
-	ct[2] = loadWord(src[16:24])
-	ct[3] = loadWord(src[24:32])
+	var b0, b1, b2, b3 uint64
+	b0 = loadWord(src[0:8])
+	b1 = loadWord(src[8:16])
+	b2 = loadWord(src[16:24])
+	b3 = loadWord(src[24:32])
 
 	// Subtract the final round key
-	ct[0] -= c.ks[numRounds256/4][0]
-	ct[1] -= c.ks[numRounds256/4][1]
-	ct[2] -= c.ks[numRounds256/4][2]
-	ct[3] -= c.ks[numRounds256/4][3]
+	b0 -= c.ks[numRounds256/4][0]
+	b1 -= c.ks[numRounds256/4][1]
+	b2 -= c.ks[numRounds256/4][2]
+	b3 -= c.ks[numRounds256/4][3]
 
 	// Perform decryption rounds
 	for d := numRounds256 - 1; d >= 0; d -= 8 {
 		// Four rounds of permute and unmix
-		ct[1], ct[3] = ct[3], ct[1]
-		ct[3] = bits.RotateLeft64(ct[3]^ct[2], -32)
-		ct[2] -= ct[3]
-		ct[1] = bits.RotateLeft64(ct[1]^ct[0], -32)
-		ct[0] -= ct[1]
+		b1, b3 = b3, b1
+		b3 = bits.RotateLeft64(b3^b2, -32)
+		b2 -= b3
+		b1 = bits.RotateLeft64(b1^b0, -32)
+		b0 -= b1
 
-		ct[1], ct[3] = ct[3], ct[1]
-		ct[3] = bits.RotateLeft64(ct[3]^ct[2], -22)
-		ct[2] -= ct[3]
-		ct[1] = bits.RotateLeft64(ct[1]^ct[0], -58)
-		ct[0] -= ct[1]
+		b1, b3 = b3, b1
+		b3 = bits.RotateLeft64(b3^b2, -22)
+		b2 -= b3
+		b1 = bits.RotateLeft64(b1^b0, -58)
+		b0 -= b1
 
-		ct[1], ct[3] = ct[3], ct[1]
-		ct[3] = bits.RotateLeft64(ct[3]^ct[2], -12)
-		ct[2] -= ct[3]
-		ct[1] = bits.RotateLeft64(ct[1]^ct[0], -46)
-		ct[0] -= ct[1]
+		b1, b3 = b3, b1
+		b3 = bits.RotateLeft64(b3^b2, -12)
+		b2 -= b3
+		b1 = bits.RotateLeft64(b1^b0, -46)
+		b0 -= b1
 
-		ct[1], ct[3] = ct[3], ct[1]
-		ct[3] = bits.RotateLeft64(ct[3]^ct[2], -33)
-		ct[2] -= ct[3]
-		ct[1] = bits.RotateLeft64(ct[1]^ct[0], -25)
-		ct[0] -= ct[1]
+		b1, b3 = b3, b1
+		b3 = bits.RotateLeft64(b3^b2, -33)
+		b2 -= b3
+		b1 = bits.RotateLeft64(b1^b0, -25)
+		b0 -= b1
 
 		// Subtract round key
-		ct[0] -= c.ks[d/4][0]
-		ct[1] -= c.ks[d/4][1]
-		ct[2] -= c.ks[d/4][2]
-		ct[3] -= c.ks[d/4][3]
+		b0 -= c.ks[d/4][0]
+		b1 -= c.ks[d/4][1]
+		b2 -= c.ks[d/4][2]
+		b3 -= c.ks[d/4][3]
 
 		// Four rounds of permute and unmix
-		ct[1], ct[3] = ct[3], ct[1]
-		ct[3] = bits.RotateLeft64(ct[3]^ct[2], -37)
-		ct[2] -= ct[3]
-		ct[1] = bits.RotateLeft64(ct[1]^ct[0], -5)
-		ct[0] -= ct[1]
+		b1, b3 = b3, b1
+		b3 = bits.RotateLeft64(b3^b2, -37)
+		b2 -= b3
+		b1 = bits.RotateLeft64(b1^b0, -5)
+		b0 -= b1
 
-		ct[1], ct[3] = ct[3], ct[1]
-		ct[3] = bits.RotateLeft64(ct[3]^ct[2], -40)
-		ct[2] -= ct[3]
-		ct[1] = bits.RotateLeft64(ct[1]^ct[0], -23)
-		ct[0] -= ct[1]
+		b1, b3 = b3, b1
+		b3 = bits.RotateLeft64(b3^b2, -40)
+		b2 -= b3
+		b1 = bits.RotateLeft64(b1^b0, -23)
+		b0 -= b1
 
-		ct[1], ct[3] = ct[3], ct[1]
-		ct[3] = bits.RotateLeft64(ct[3]^ct[2], -57)
-		ct[2] -= ct[3]
-		ct[1] = bits.RotateLeft64(ct[1]^ct[0], -52)
-		ct[0] -= ct[1]
+		b1, b3 = b3, b1
+		b3 = bits.RotateLeft64(b3^b2, -57)
+		b2 -= b3
+		b1 = bits.RotateLeft64(b1^b0, -52)
+		b0 -= b1
 
-		ct[1], ct[3] = ct[3], ct[1]
-		ct[3] = bits.RotateLeft64(ct[3]^ct[2], -16)
-		ct[2] -= ct[3]
-		ct[1] = bits.RotateLeft64(ct[1]^ct[0], -14)
-		ct[0] -= ct[1]
+		b1, b3 = b3, b1
+		b3 = bits.RotateLeft64(b3^b2, -16)
+		b2 -= b3
+		b1 = bits.RotateLeft64(b1^b0, -14)
+		b0 -= b1
 
 		// Subtract round key
-		ct[0] -= c.ks[(d/4)-1][0]
-		ct[1] -= c.ks[(d/4)-1][1]
-		ct[2] -= c.ks[(d/4)-1][2]
-		ct[3] -= c.ks[(d/4)-1][3]
+		b0 -= c.ks[(d/4)-1][0]
+		b1 -= c.ks[(d/4)-1][1]
+		b2 -= c.ks[(d/4)-1][2]
+		b3 -= c.ks[(d/4)-1][3]
 	}
 
 	// Store decrypted value in destination
-	storeWord(dst[0:8], ct[0])
-	storeWord(dst[8:16], ct[1])
-	storeWord(dst[16:24], ct[2])
-	storeWord(dst[24:32], ct[3])
+	storeWord(dst[0:8], b0)
+	storeWord(dst[8:16], b1)
+	storeWord(dst[16:24], b2)
+	storeWord(dst[24:32], b3)
 }

@@ -78,252 +78,252 @@ func (c *cipher1024) Encrypt(dst, src []byte) {
 	}
 
 	// Load the input
-	in := new([numWords1024]uint64)
-	in[0] = loadWord(src[0:8])
-	in[1] = loadWord(src[8:16])
-	in[2] = loadWord(src[16:24])
-	in[3] = loadWord(src[24:32])
-	in[4] = loadWord(src[32:40])
-	in[5] = loadWord(src[40:48])
-	in[6] = loadWord(src[48:56])
-	in[7] = loadWord(src[56:64])
-	in[8] = loadWord(src[64:72])
-	in[9] = loadWord(src[72:80])
-	in[10] = loadWord(src[80:88])
-	in[11] = loadWord(src[88:96])
-	in[12] = loadWord(src[96:104])
-	in[13] = loadWord(src[104:112])
-	in[14] = loadWord(src[112:120])
-	in[15] = loadWord(src[120:128])
+	var b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15 uint64
+	b0 = loadWord(src[0:8])
+	b1 = loadWord(src[8:16])
+	b2 = loadWord(src[16:24])
+	b3 = loadWord(src[24:32])
+	b4 = loadWord(src[32:40])
+	b5 = loadWord(src[40:48])
+	b6 = loadWord(src[48:56])
+	b7 = loadWord(src[56:64])
+	b8 = loadWord(src[64:72])
+	b9 = loadWord(src[72:80])
+	b10 = loadWord(src[80:88])
+	b11 = loadWord(src[88:96])
+	b12 = loadWord(src[96:104])
+	b13 = loadWord(src[104:112])
+	b14 = loadWord(src[112:120])
+	b15 = loadWord(src[120:128])
 
 	// Perform encryption rounds
 	for d := 0; d < numRounds1024; d += 8 {
 		// Add round key
-		in[0] += c.ks[d/4][0]
-		in[1] += c.ks[d/4][1]
-		in[2] += c.ks[d/4][2]
-		in[3] += c.ks[d/4][3]
-		in[4] += c.ks[d/4][4]
-		in[5] += c.ks[d/4][5]
-		in[6] += c.ks[d/4][6]
-		in[7] += c.ks[d/4][7]
-		in[8] += c.ks[d/4][8]
-		in[9] += c.ks[d/4][9]
-		in[10] += c.ks[d/4][10]
-		in[11] += c.ks[d/4][11]
-		in[12] += c.ks[d/4][12]
-		in[13] += c.ks[d/4][13]
-		in[14] += c.ks[d/4][14]
-		in[15] += c.ks[d/4][15]
+		b0 += c.ks[d/4][0]
+		b1 += c.ks[d/4][1]
+		b2 += c.ks[d/4][2]
+		b3 += c.ks[d/4][3]
+		b4 += c.ks[d/4][4]
+		b5 += c.ks[d/4][5]
+		b6 += c.ks[d/4][6]
+		b7 += c.ks[d/4][7]
+		b8 += c.ks[d/4][8]
+		b9 += c.ks[d/4][9]
+		b10 += c.ks[d/4][10]
+		b11 += c.ks[d/4][11]
+		b12 += c.ks[d/4][12]
+		b13 += c.ks[d/4][13]
+		b14 += c.ks[d/4][14]
+		b15 += c.ks[d/4][15]
 
 		// Four rounds of mix and permute
-		in[0] += in[1]
-		in[1] = bits.RotateLeft64(in[1], 24) ^ in[0]
-		in[2] += in[3]
-		in[3] = bits.RotateLeft64(in[3], 13) ^ in[2]
-		in[4] += in[5]
-		in[5] = bits.RotateLeft64(in[5], 8) ^ in[4]
-		in[6] += in[7]
-		in[7] = bits.RotateLeft64(in[7], 47) ^ in[6]
-		in[8] += in[9]
-		in[9] = bits.RotateLeft64(in[9], 8) ^ in[8]
-		in[10] += in[11]
-		in[11] = bits.RotateLeft64(in[11], 17) ^ in[10]
-		in[12] += in[13]
-		in[13] = bits.RotateLeft64(in[13], 22) ^ in[12]
-		in[14] += in[15]
-		in[15] = bits.RotateLeft64(in[15], 37) ^ in[14]
-		in[1], in[3], in[4], in[5], in[6], in[7], in[8], in[9], in[10], in[11], in[12], in[13], in[14], in[15] =
-			in[9], in[13], in[6], in[11], in[4], in[15], in[10], in[7], in[12], in[3], in[14], in[5], in[8], in[1]
+		b0 += b1
+		b1 = bits.RotateLeft64(b1, 24) ^ b0
+		b2 += b3
+		b3 = bits.RotateLeft64(b3, 13) ^ b2
+		b4 += b5
+		b5 = bits.RotateLeft64(b5, 8) ^ b4
+		b6 += b7
+		b7 = bits.RotateLeft64(b7, 47) ^ b6
+		b8 += b9
+		b9 = bits.RotateLeft64(b9, 8) ^ b8
+		b10 += b11
+		b11 = bits.RotateLeft64(b11, 17) ^ b10
+		b12 += b13
+		b13 = bits.RotateLeft64(b13, 22) ^ b12
+		b14 += b15
+		b15 = bits.RotateLeft64(b15, 37) ^ b14
+		b1, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15 =
+			b9, b13, b6, b11, b4, b15, b10, b7, b12, b3, b14, b5, b8, b1
 
-		in[0] += in[1]
-		in[1] = bits.RotateLeft64(in[1], 38) ^ in[0]
-		in[2] += in[3]
-		in[3] = bits.RotateLeft64(in[3], 19) ^ in[2]
-		in[4] += in[5]
-		in[5] = bits.RotateLeft64(in[5], 10) ^ in[4]
-		in[6] += in[7]
-		in[7] = bits.RotateLeft64(in[7], 55) ^ in[6]
-		in[8] += in[9]
-		in[9] = bits.RotateLeft64(in[9], 49) ^ in[8]
-		in[10] += in[11]
-		in[11] = bits.RotateLeft64(in[11], 18) ^ in[10]
-		in[12] += in[13]
-		in[13] = bits.RotateLeft64(in[13], 23) ^ in[12]
-		in[14] += in[15]
-		in[15] = bits.RotateLeft64(in[15], 52) ^ in[14]
-		in[1], in[3], in[4], in[5], in[6], in[7], in[8], in[9], in[10], in[11], in[12], in[13], in[14], in[15] =
-			in[9], in[13], in[6], in[11], in[4], in[15], in[10], in[7], in[12], in[3], in[14], in[5], in[8], in[1]
+		b0 += b1
+		b1 = bits.RotateLeft64(b1, 38) ^ b0
+		b2 += b3
+		b3 = bits.RotateLeft64(b3, 19) ^ b2
+		b4 += b5
+		b5 = bits.RotateLeft64(b5, 10) ^ b4
+		b6 += b7
+		b7 = bits.RotateLeft64(b7, 55) ^ b6
+		b8 += b9
+		b9 = bits.RotateLeft64(b9, 49) ^ b8
+		b10 += b11
+		b11 = bits.RotateLeft64(b11, 18) ^ b10
+		b12 += b13
+		b13 = bits.RotateLeft64(b13, 23) ^ b12
+		b14 += b15
+		b15 = bits.RotateLeft64(b15, 52) ^ b14
+		b1, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15 =
+			b9, b13, b6, b11, b4, b15, b10, b7, b12, b3, b14, b5, b8, b1
 
-		in[0] += in[1]
-		in[1] = bits.RotateLeft64(in[1], 33) ^ in[0]
-		in[2] += in[3]
-		in[3] = bits.RotateLeft64(in[3], 4) ^ in[2]
-		in[4] += in[5]
-		in[5] = bits.RotateLeft64(in[5], 51) ^ in[4]
-		in[6] += in[7]
-		in[7] = bits.RotateLeft64(in[7], 13) ^ in[6]
-		in[8] += in[9]
-		in[9] = bits.RotateLeft64(in[9], 34) ^ in[8]
-		in[10] += in[11]
-		in[11] = bits.RotateLeft64(in[11], 41) ^ in[10]
-		in[12] += in[13]
-		in[13] = bits.RotateLeft64(in[13], 59) ^ in[12]
-		in[14] += in[15]
-		in[15] = bits.RotateLeft64(in[15], 17) ^ in[14]
-		in[1], in[3], in[4], in[5], in[6], in[7], in[8], in[9], in[10], in[11], in[12], in[13], in[14], in[15] =
-			in[9], in[13], in[6], in[11], in[4], in[15], in[10], in[7], in[12], in[3], in[14], in[5], in[8], in[1]
+		b0 += b1
+		b1 = bits.RotateLeft64(b1, 33) ^ b0
+		b2 += b3
+		b3 = bits.RotateLeft64(b3, 4) ^ b2
+		b4 += b5
+		b5 = bits.RotateLeft64(b5, 51) ^ b4
+		b6 += b7
+		b7 = bits.RotateLeft64(b7, 13) ^ b6
+		b8 += b9
+		b9 = bits.RotateLeft64(b9, 34) ^ b8
+		b10 += b11
+		b11 = bits.RotateLeft64(b11, 41) ^ b10
+		b12 += b13
+		b13 = bits.RotateLeft64(b13, 59) ^ b12
+		b14 += b15
+		b15 = bits.RotateLeft64(b15, 17) ^ b14
+		b1, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15 =
+			b9, b13, b6, b11, b4, b15, b10, b7, b12, b3, b14, b5, b8, b1
 
-		in[0] += in[1]
-		in[1] = bits.RotateLeft64(in[1], 5) ^ in[0]
-		in[2] += in[3]
-		in[3] = bits.RotateLeft64(in[3], 20) ^ in[2]
-		in[4] += in[5]
-		in[5] = bits.RotateLeft64(in[5], 48) ^ in[4]
-		in[6] += in[7]
-		in[7] = bits.RotateLeft64(in[7], 41) ^ in[6]
-		in[8] += in[9]
-		in[9] = bits.RotateLeft64(in[9], 47) ^ in[8]
-		in[10] += in[11]
-		in[11] = bits.RotateLeft64(in[11], 28) ^ in[10]
-		in[12] += in[13]
-		in[13] = bits.RotateLeft64(in[13], 16) ^ in[12]
-		in[14] += in[15]
-		in[15] = bits.RotateLeft64(in[15], 25) ^ in[14]
-		in[1], in[3], in[4], in[5], in[6], in[7], in[8], in[9], in[10], in[11], in[12], in[13], in[14], in[15] =
-			in[9], in[13], in[6], in[11], in[4], in[15], in[10], in[7], in[12], in[3], in[14], in[5], in[8], in[1]
+		b0 += b1
+		b1 = bits.RotateLeft64(b1, 5) ^ b0
+		b2 += b3
+		b3 = bits.RotateLeft64(b3, 20) ^ b2
+		b4 += b5
+		b5 = bits.RotateLeft64(b5, 48) ^ b4
+		b6 += b7
+		b7 = bits.RotateLeft64(b7, 41) ^ b6
+		b8 += b9
+		b9 = bits.RotateLeft64(b9, 47) ^ b8
+		b10 += b11
+		b11 = bits.RotateLeft64(b11, 28) ^ b10
+		b12 += b13
+		b13 = bits.RotateLeft64(b13, 16) ^ b12
+		b14 += b15
+		b15 = bits.RotateLeft64(b15, 25) ^ b14
+		b1, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15 =
+			b9, b13, b6, b11, b4, b15, b10, b7, b12, b3, b14, b5, b8, b1
 
 		// Add round key
-		in[0] += c.ks[(d/4)+1][0]
-		in[1] += c.ks[(d/4)+1][1]
-		in[2] += c.ks[(d/4)+1][2]
-		in[3] += c.ks[(d/4)+1][3]
-		in[4] += c.ks[(d/4)+1][4]
-		in[5] += c.ks[(d/4)+1][5]
-		in[6] += c.ks[(d/4)+1][6]
-		in[7] += c.ks[(d/4)+1][7]
-		in[8] += c.ks[(d/4)+1][8]
-		in[9] += c.ks[(d/4)+1][9]
-		in[10] += c.ks[(d/4)+1][10]
-		in[11] += c.ks[(d/4)+1][11]
-		in[12] += c.ks[(d/4)+1][12]
-		in[13] += c.ks[(d/4)+1][13]
-		in[14] += c.ks[(d/4)+1][14]
-		in[15] += c.ks[(d/4)+1][15]
+		b0 += c.ks[(d/4)+1][0]
+		b1 += c.ks[(d/4)+1][1]
+		b2 += c.ks[(d/4)+1][2]
+		b3 += c.ks[(d/4)+1][3]
+		b4 += c.ks[(d/4)+1][4]
+		b5 += c.ks[(d/4)+1][5]
+		b6 += c.ks[(d/4)+1][6]
+		b7 += c.ks[(d/4)+1][7]
+		b8 += c.ks[(d/4)+1][8]
+		b9 += c.ks[(d/4)+1][9]
+		b10 += c.ks[(d/4)+1][10]
+		b11 += c.ks[(d/4)+1][11]
+		b12 += c.ks[(d/4)+1][12]
+		b13 += c.ks[(d/4)+1][13]
+		b14 += c.ks[(d/4)+1][14]
+		b15 += c.ks[(d/4)+1][15]
 
 		// Four rounds of mix and permute
-		in[0] += in[1]
-		in[1] = bits.RotateLeft64(in[1], 41) ^ in[0]
-		in[2] += in[3]
-		in[3] = bits.RotateLeft64(in[3], 9) ^ in[2]
-		in[4] += in[5]
-		in[5] = bits.RotateLeft64(in[5], 37) ^ in[4]
-		in[6] += in[7]
-		in[7] = bits.RotateLeft64(in[7], 31) ^ in[6]
-		in[8] += in[9]
-		in[9] = bits.RotateLeft64(in[9], 12) ^ in[8]
-		in[10] += in[11]
-		in[11] = bits.RotateLeft64(in[11], 47) ^ in[10]
-		in[12] += in[13]
-		in[13] = bits.RotateLeft64(in[13], 44) ^ in[12]
-		in[14] += in[15]
-		in[15] = bits.RotateLeft64(in[15], 30) ^ in[14]
-		in[1], in[3], in[4], in[5], in[6], in[7], in[8], in[9], in[10], in[11], in[12], in[13], in[14], in[15] =
-			in[9], in[13], in[6], in[11], in[4], in[15], in[10], in[7], in[12], in[3], in[14], in[5], in[8], in[1]
+		b0 += b1
+		b1 = bits.RotateLeft64(b1, 41) ^ b0
+		b2 += b3
+		b3 = bits.RotateLeft64(b3, 9) ^ b2
+		b4 += b5
+		b5 = bits.RotateLeft64(b5, 37) ^ b4
+		b6 += b7
+		b7 = bits.RotateLeft64(b7, 31) ^ b6
+		b8 += b9
+		b9 = bits.RotateLeft64(b9, 12) ^ b8
+		b10 += b11
+		b11 = bits.RotateLeft64(b11, 47) ^ b10
+		b12 += b13
+		b13 = bits.RotateLeft64(b13, 44) ^ b12
+		b14 += b15
+		b15 = bits.RotateLeft64(b15, 30) ^ b14
+		b1, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15 =
+			b9, b13, b6, b11, b4, b15, b10, b7, b12, b3, b14, b5, b8, b1
 
-		in[0] += in[1]
-		in[1] = bits.RotateLeft64(in[1], 16) ^ in[0]
-		in[2] += in[3]
-		in[3] = bits.RotateLeft64(in[3], 34) ^ in[2]
-		in[4] += in[5]
-		in[5] = bits.RotateLeft64(in[5], 56) ^ in[4]
-		in[6] += in[7]
-		in[7] = bits.RotateLeft64(in[7], 51) ^ in[6]
-		in[8] += in[9]
-		in[9] = bits.RotateLeft64(in[9], 4) ^ in[8]
-		in[10] += in[11]
-		in[11] = bits.RotateLeft64(in[11], 53) ^ in[10]
-		in[12] += in[13]
-		in[13] = bits.RotateLeft64(in[13], 42) ^ in[12]
-		in[14] += in[15]
-		in[15] = bits.RotateLeft64(in[15], 41) ^ in[14]
-		in[1], in[3], in[4], in[5], in[6], in[7], in[8], in[9], in[10], in[11], in[12], in[13], in[14], in[15] =
-			in[9], in[13], in[6], in[11], in[4], in[15], in[10], in[7], in[12], in[3], in[14], in[5], in[8], in[1]
+		b0 += b1
+		b1 = bits.RotateLeft64(b1, 16) ^ b0
+		b2 += b3
+		b3 = bits.RotateLeft64(b3, 34) ^ b2
+		b4 += b5
+		b5 = bits.RotateLeft64(b5, 56) ^ b4
+		b6 += b7
+		b7 = bits.RotateLeft64(b7, 51) ^ b6
+		b8 += b9
+		b9 = bits.RotateLeft64(b9, 4) ^ b8
+		b10 += b11
+		b11 = bits.RotateLeft64(b11, 53) ^ b10
+		b12 += b13
+		b13 = bits.RotateLeft64(b13, 42) ^ b12
+		b14 += b15
+		b15 = bits.RotateLeft64(b15, 41) ^ b14
+		b1, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15 =
+			b9, b13, b6, b11, b4, b15, b10, b7, b12, b3, b14, b5, b8, b1
 
-		in[0] += in[1]
-		in[1] = bits.RotateLeft64(in[1], 31) ^ in[0]
-		in[2] += in[3]
-		in[3] = bits.RotateLeft64(in[3], 44) ^ in[2]
-		in[4] += in[5]
-		in[5] = bits.RotateLeft64(in[5], 47) ^ in[4]
-		in[6] += in[7]
-		in[7] = bits.RotateLeft64(in[7], 46) ^ in[6]
-		in[8] += in[9]
-		in[9] = bits.RotateLeft64(in[9], 19) ^ in[8]
-		in[10] += in[11]
-		in[11] = bits.RotateLeft64(in[11], 42) ^ in[10]
-		in[12] += in[13]
-		in[13] = bits.RotateLeft64(in[13], 44) ^ in[12]
-		in[14] += in[15]
-		in[15] = bits.RotateLeft64(in[15], 25) ^ in[14]
-		in[1], in[3], in[4], in[5], in[6], in[7], in[8], in[9], in[10], in[11], in[12], in[13], in[14], in[15] =
-			in[9], in[13], in[6], in[11], in[4], in[15], in[10], in[7], in[12], in[3], in[14], in[5], in[8], in[1]
+		b0 += b1
+		b1 = bits.RotateLeft64(b1, 31) ^ b0
+		b2 += b3
+		b3 = bits.RotateLeft64(b3, 44) ^ b2
+		b4 += b5
+		b5 = bits.RotateLeft64(b5, 47) ^ b4
+		b6 += b7
+		b7 = bits.RotateLeft64(b7, 46) ^ b6
+		b8 += b9
+		b9 = bits.RotateLeft64(b9, 19) ^ b8
+		b10 += b11
+		b11 = bits.RotateLeft64(b11, 42) ^ b10
+		b12 += b13
+		b13 = bits.RotateLeft64(b13, 44) ^ b12
+		b14 += b15
+		b15 = bits.RotateLeft64(b15, 25) ^ b14
+		b1, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15 =
+			b9, b13, b6, b11, b4, b15, b10, b7, b12, b3, b14, b5, b8, b1
 
-		in[0] += in[1]
-		in[1] = bits.RotateLeft64(in[1], 9) ^ in[0]
-		in[2] += in[3]
-		in[3] = bits.RotateLeft64(in[3], 48) ^ in[2]
-		in[4] += in[5]
-		in[5] = bits.RotateLeft64(in[5], 35) ^ in[4]
-		in[6] += in[7]
-		in[7] = bits.RotateLeft64(in[7], 52) ^ in[6]
-		in[8] += in[9]
-		in[9] = bits.RotateLeft64(in[9], 23) ^ in[8]
-		in[10] += in[11]
-		in[11] = bits.RotateLeft64(in[11], 31) ^ in[10]
-		in[12] += in[13]
-		in[13] = bits.RotateLeft64(in[13], 37) ^ in[12]
-		in[14] += in[15]
-		in[15] = bits.RotateLeft64(in[15], 20) ^ in[14]
-		in[1], in[3], in[4], in[5], in[6], in[7], in[8], in[9], in[10], in[11], in[12], in[13], in[14], in[15] =
-			in[9], in[13], in[6], in[11], in[4], in[15], in[10], in[7], in[12], in[3], in[14], in[5], in[8], in[1]
+		b0 += b1
+		b1 = bits.RotateLeft64(b1, 9) ^ b0
+		b2 += b3
+		b3 = bits.RotateLeft64(b3, 48) ^ b2
+		b4 += b5
+		b5 = bits.RotateLeft64(b5, 35) ^ b4
+		b6 += b7
+		b7 = bits.RotateLeft64(b7, 52) ^ b6
+		b8 += b9
+		b9 = bits.RotateLeft64(b9, 23) ^ b8
+		b10 += b11
+		b11 = bits.RotateLeft64(b11, 31) ^ b10
+		b12 += b13
+		b13 = bits.RotateLeft64(b13, 37) ^ b12
+		b14 += b15
+		b15 = bits.RotateLeft64(b15, 20) ^ b14
+		b1, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15 =
+			b9, b13, b6, b11, b4, b15, b10, b7, b12, b3, b14, b5, b8, b1
 	}
 
 	// Add the final round key
-	in[0] += c.ks[numRounds1024/4][0]
-	in[1] += c.ks[numRounds1024/4][1]
-	in[2] += c.ks[numRounds1024/4][2]
-	in[3] += c.ks[numRounds1024/4][3]
-	in[4] += c.ks[numRounds1024/4][4]
-	in[5] += c.ks[numRounds1024/4][5]
-	in[6] += c.ks[numRounds1024/4][6]
-	in[7] += c.ks[numRounds1024/4][7]
-	in[8] += c.ks[numRounds1024/4][8]
-	in[9] += c.ks[numRounds1024/4][9]
-	in[10] += c.ks[numRounds1024/4][10]
-	in[11] += c.ks[numRounds1024/4][11]
-	in[12] += c.ks[numRounds1024/4][12]
-	in[13] += c.ks[numRounds1024/4][13]
-	in[14] += c.ks[numRounds1024/4][14]
-	in[15] += c.ks[numRounds1024/4][15]
+	b0 += c.ks[numRounds1024/4][0]
+	b1 += c.ks[numRounds1024/4][1]
+	b2 += c.ks[numRounds1024/4][2]
+	b3 += c.ks[numRounds1024/4][3]
+	b4 += c.ks[numRounds1024/4][4]
+	b5 += c.ks[numRounds1024/4][5]
+	b6 += c.ks[numRounds1024/4][6]
+	b7 += c.ks[numRounds1024/4][7]
+	b8 += c.ks[numRounds1024/4][8]
+	b9 += c.ks[numRounds1024/4][9]
+	b10 += c.ks[numRounds1024/4][10]
+	b11 += c.ks[numRounds1024/4][11]
+	b12 += c.ks[numRounds1024/4][12]
+	b13 += c.ks[numRounds1024/4][13]
+	b14 += c.ks[numRounds1024/4][14]
+	b15 += c.ks[numRounds1024/4][15]
 
 	// Store the ciphertext in destination
-	storeWord(dst[0:8], in[0])
-	storeWord(dst[8:16], in[1])
-	storeWord(dst[16:24], in[2])
-	storeWord(dst[24:32], in[3])
-	storeWord(dst[32:40], in[4])
-	storeWord(dst[40:48], in[5])
-	storeWord(dst[48:56], in[6])
-	storeWord(dst[56:64], in[7])
-	storeWord(dst[64:72], in[8])
-	storeWord(dst[72:80], in[9])
-	storeWord(dst[80:88], in[10])
-	storeWord(dst[88:96], in[11])
-	storeWord(dst[96:104], in[12])
-	storeWord(dst[104:112], in[13])
-	storeWord(dst[112:120], in[14])
-	storeWord(dst[120:128], in[15])
+	storeWord(dst[0:8], b0)
+	storeWord(dst[8:16], b1)
+	storeWord(dst[16:24], b2)
+	storeWord(dst[24:32], b3)
+	storeWord(dst[32:40], b4)
+	storeWord(dst[40:48], b5)
+	storeWord(dst[48:56], b6)
+	storeWord(dst[56:64], b7)
+	storeWord(dst[64:72], b8)
+	storeWord(dst[72:80], b9)
+	storeWord(dst[80:88], b10)
+	storeWord(dst[88:96], b11)
+	storeWord(dst[96:104], b12)
+	storeWord(dst[104:112], b13)
+	storeWord(dst[112:120], b14)
+	storeWord(dst[120:128], b15)
 }
 
 // Decrypt loads ciphertext from src, decrypts it, and stores it in dst.
@@ -339,250 +339,250 @@ func (c *cipher1024) Decrypt(dst, src []byte) {
 	}
 
 	// Load the ciphertext
-	ct := new([numWords1024]uint64)
-	ct[0] = loadWord(src[0:8])
-	ct[1] = loadWord(src[8:16])
-	ct[2] = loadWord(src[16:24])
-	ct[3] = loadWord(src[24:32])
-	ct[4] = loadWord(src[32:40])
-	ct[5] = loadWord(src[40:48])
-	ct[6] = loadWord(src[48:56])
-	ct[7] = loadWord(src[56:64])
-	ct[8] = loadWord(src[64:72])
-	ct[9] = loadWord(src[72:80])
-	ct[10] = loadWord(src[80:88])
-	ct[11] = loadWord(src[88:96])
-	ct[12] = loadWord(src[96:104])
-	ct[13] = loadWord(src[104:112])
-	ct[14] = loadWord(src[112:120])
-	ct[15] = loadWord(src[120:128])
+	var b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15 uint64
+	b0 = loadWord(src[0:8])
+	b1 = loadWord(src[8:16])
+	b2 = loadWord(src[16:24])
+	b3 = loadWord(src[24:32])
+	b4 = loadWord(src[32:40])
+	b5 = loadWord(src[40:48])
+	b6 = loadWord(src[48:56])
+	b7 = loadWord(src[56:64])
+	b8 = loadWord(src[64:72])
+	b9 = loadWord(src[72:80])
+	b10 = loadWord(src[80:88])
+	b11 = loadWord(src[88:96])
+	b12 = loadWord(src[96:104])
+	b13 = loadWord(src[104:112])
+	b14 = loadWord(src[112:120])
+	b15 = loadWord(src[120:128])
 
 	// Subtract the final round key
-	ct[0] -= c.ks[numRounds1024/4][0]
-	ct[1] -= c.ks[numRounds1024/4][1]
-	ct[2] -= c.ks[numRounds1024/4][2]
-	ct[3] -= c.ks[numRounds1024/4][3]
-	ct[4] -= c.ks[numRounds1024/4][4]
-	ct[5] -= c.ks[numRounds1024/4][5]
-	ct[6] -= c.ks[numRounds1024/4][6]
-	ct[7] -= c.ks[numRounds1024/4][7]
-	ct[8] -= c.ks[numRounds1024/4][8]
-	ct[9] -= c.ks[numRounds1024/4][9]
-	ct[10] -= c.ks[numRounds1024/4][10]
-	ct[11] -= c.ks[numRounds1024/4][11]
-	ct[12] -= c.ks[numRounds1024/4][12]
-	ct[13] -= c.ks[numRounds1024/4][13]
-	ct[14] -= c.ks[numRounds1024/4][14]
-	ct[15] -= c.ks[numRounds1024/4][15]
+	b0 -= c.ks[numRounds1024/4][0]
+	b1 -= c.ks[numRounds1024/4][1]
+	b2 -= c.ks[numRounds1024/4][2]
+	b3 -= c.ks[numRounds1024/4][3]
+	b4 -= c.ks[numRounds1024/4][4]
+	b5 -= c.ks[numRounds1024/4][5]
+	b6 -= c.ks[numRounds1024/4][6]
+	b7 -= c.ks[numRounds1024/4][7]
+	b8 -= c.ks[numRounds1024/4][8]
+	b9 -= c.ks[numRounds1024/4][9]
+	b10 -= c.ks[numRounds1024/4][10]
+	b11 -= c.ks[numRounds1024/4][11]
+	b12 -= c.ks[numRounds1024/4][12]
+	b13 -= c.ks[numRounds1024/4][13]
+	b14 -= c.ks[numRounds1024/4][14]
+	b15 -= c.ks[numRounds1024/4][15]
 
 	// Perform decryption rounds
 	for d := numRounds1024 - 1; d >= 0; d -= 8 {
 		// Four rounds of permute and unmix
-		ct[1], ct[3], ct[4], ct[5], ct[6], ct[7], ct[8], ct[9], ct[10], ct[11], ct[12], ct[13], ct[14], ct[15] =
-			ct[15], ct[11], ct[6], ct[13], ct[4], ct[9], ct[14], ct[1], ct[8], ct[5], ct[10], ct[3], ct[12], ct[7]
-		ct[15] = bits.RotateLeft64(ct[15]^ct[14], -20)
-		ct[14] -= ct[15]
-		ct[13] = bits.RotateLeft64(ct[13]^ct[12], -37)
-		ct[12] -= ct[13]
-		ct[11] = bits.RotateLeft64(ct[11]^ct[10], -31)
-		ct[10] -= ct[11]
-		ct[9] = bits.RotateLeft64(ct[9]^ct[8], -23)
-		ct[8] -= ct[9]
-		ct[7] = bits.RotateLeft64(ct[7]^ct[6], -52)
-		ct[6] -= ct[7]
-		ct[5] = bits.RotateLeft64(ct[5]^ct[4], -35)
-		ct[4] -= ct[5]
-		ct[3] = bits.RotateLeft64(ct[3]^ct[2], -48)
-		ct[2] -= ct[3]
-		ct[1] = bits.RotateLeft64(ct[1]^ct[0], -9)
-		ct[0] -= ct[1]
+		b1, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15 =
+			b15, b11, b6, b13, b4, b9, b14, b1, b8, b5, b10, b3, b12, b7
+		b15 = bits.RotateLeft64(b15^b14, -20)
+		b14 -= b15
+		b13 = bits.RotateLeft64(b13^b12, -37)
+		b12 -= b13
+		b11 = bits.RotateLeft64(b11^b10, -31)
+		b10 -= b11
+		b9 = bits.RotateLeft64(b9^b8, -23)
+		b8 -= b9
+		b7 = bits.RotateLeft64(b7^b6, -52)
+		b6 -= b7
+		b5 = bits.RotateLeft64(b5^b4, -35)
+		b4 -= b5
+		b3 = bits.RotateLeft64(b3^b2, -48)
+		b2 -= b3
+		b1 = bits.RotateLeft64(b1^b0, -9)
+		b0 -= b1
 
-		ct[1], ct[3], ct[4], ct[5], ct[6], ct[7], ct[8], ct[9], ct[10], ct[11], ct[12], ct[13], ct[14], ct[15] =
-			ct[15], ct[11], ct[6], ct[13], ct[4], ct[9], ct[14], ct[1], ct[8], ct[5], ct[10], ct[3], ct[12], ct[7]
-		ct[15] = bits.RotateLeft64(ct[15]^ct[14], -25)
-		ct[14] -= ct[15]
-		ct[13] = bits.RotateLeft64(ct[13]^ct[12], -44)
-		ct[12] -= ct[13]
-		ct[11] = bits.RotateLeft64(ct[11]^ct[10], -42)
-		ct[10] -= ct[11]
-		ct[9] = bits.RotateLeft64(ct[9]^ct[8], -19)
-		ct[8] -= ct[9]
-		ct[7] = bits.RotateLeft64(ct[7]^ct[6], -46)
-		ct[6] -= ct[7]
-		ct[5] = bits.RotateLeft64(ct[5]^ct[4], -47)
-		ct[4] -= ct[5]
-		ct[3] = bits.RotateLeft64(ct[3]^ct[2], -44)
-		ct[2] -= ct[3]
-		ct[1] = bits.RotateLeft64(ct[1]^ct[0], -31)
-		ct[0] -= ct[1]
+		b1, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15 =
+			b15, b11, b6, b13, b4, b9, b14, b1, b8, b5, b10, b3, b12, b7
+		b15 = bits.RotateLeft64(b15^b14, -25)
+		b14 -= b15
+		b13 = bits.RotateLeft64(b13^b12, -44)
+		b12 -= b13
+		b11 = bits.RotateLeft64(b11^b10, -42)
+		b10 -= b11
+		b9 = bits.RotateLeft64(b9^b8, -19)
+		b8 -= b9
+		b7 = bits.RotateLeft64(b7^b6, -46)
+		b6 -= b7
+		b5 = bits.RotateLeft64(b5^b4, -47)
+		b4 -= b5
+		b3 = bits.RotateLeft64(b3^b2, -44)
+		b2 -= b3
+		b1 = bits.RotateLeft64(b1^b0, -31)
+		b0 -= b1
 
-		ct[1], ct[3], ct[4], ct[5], ct[6], ct[7], ct[8], ct[9], ct[10], ct[11], ct[12], ct[13], ct[14], ct[15] =
-			ct[15], ct[11], ct[6], ct[13], ct[4], ct[9], ct[14], ct[1], ct[8], ct[5], ct[10], ct[3], ct[12], ct[7]
-		ct[15] = bits.RotateLeft64(ct[15]^ct[14], -41)
-		ct[14] -= ct[15]
-		ct[13] = bits.RotateLeft64(ct[13]^ct[12], -42)
-		ct[12] -= ct[13]
-		ct[11] = bits.RotateLeft64(ct[11]^ct[10], -53)
-		ct[10] -= ct[11]
-		ct[9] = bits.RotateLeft64(ct[9]^ct[8], -4)
-		ct[8] -= ct[9]
-		ct[7] = bits.RotateLeft64(ct[7]^ct[6], -51)
-		ct[6] -= ct[7]
-		ct[5] = bits.RotateLeft64(ct[5]^ct[4], -56)
-		ct[4] -= ct[5]
-		ct[3] = bits.RotateLeft64(ct[3]^ct[2], -34)
-		ct[2] -= ct[3]
-		ct[1] = bits.RotateLeft64(ct[1]^ct[0], -16)
-		ct[0] -= ct[1]
+		b1, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15 =
+			b15, b11, b6, b13, b4, b9, b14, b1, b8, b5, b10, b3, b12, b7
+		b15 = bits.RotateLeft64(b15^b14, -41)
+		b14 -= b15
+		b13 = bits.RotateLeft64(b13^b12, -42)
+		b12 -= b13
+		b11 = bits.RotateLeft64(b11^b10, -53)
+		b10 -= b11
+		b9 = bits.RotateLeft64(b9^b8, -4)
+		b8 -= b9
+		b7 = bits.RotateLeft64(b7^b6, -51)
+		b6 -= b7
+		b5 = bits.RotateLeft64(b5^b4, -56)
+		b4 -= b5
+		b3 = bits.RotateLeft64(b3^b2, -34)
+		b2 -= b3
+		b1 = bits.RotateLeft64(b1^b0, -16)
+		b0 -= b1
 
-		ct[1], ct[3], ct[4], ct[5], ct[6], ct[7], ct[8], ct[9], ct[10], ct[11], ct[12], ct[13], ct[14], ct[15] =
-			ct[15], ct[11], ct[6], ct[13], ct[4], ct[9], ct[14], ct[1], ct[8], ct[5], ct[10], ct[3], ct[12], ct[7]
-		ct[15] = bits.RotateLeft64(ct[15]^ct[14], -30)
-		ct[14] -= ct[15]
-		ct[13] = bits.RotateLeft64(ct[13]^ct[12], -44)
-		ct[12] -= ct[13]
-		ct[11] = bits.RotateLeft64(ct[11]^ct[10], -47)
-		ct[10] -= ct[11]
-		ct[9] = bits.RotateLeft64(ct[9]^ct[8], -12)
-		ct[8] -= ct[9]
-		ct[7] = bits.RotateLeft64(ct[7]^ct[6], -31)
-		ct[6] -= ct[7]
-		ct[5] = bits.RotateLeft64(ct[5]^ct[4], -37)
-		ct[4] -= ct[5]
-		ct[3] = bits.RotateLeft64(ct[3]^ct[2], -9)
-		ct[2] -= ct[3]
-		ct[1] = bits.RotateLeft64(ct[1]^ct[0], -41)
-		ct[0] -= ct[1]
+		b1, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15 =
+			b15, b11, b6, b13, b4, b9, b14, b1, b8, b5, b10, b3, b12, b7
+		b15 = bits.RotateLeft64(b15^b14, -30)
+		b14 -= b15
+		b13 = bits.RotateLeft64(b13^b12, -44)
+		b12 -= b13
+		b11 = bits.RotateLeft64(b11^b10, -47)
+		b10 -= b11
+		b9 = bits.RotateLeft64(b9^b8, -12)
+		b8 -= b9
+		b7 = bits.RotateLeft64(b7^b6, -31)
+		b6 -= b7
+		b5 = bits.RotateLeft64(b5^b4, -37)
+		b4 -= b5
+		b3 = bits.RotateLeft64(b3^b2, -9)
+		b2 -= b3
+		b1 = bits.RotateLeft64(b1^b0, -41)
+		b0 -= b1
 
 		// Subtract round key
-		ct[0] -= c.ks[d/4][0]
-		ct[1] -= c.ks[d/4][1]
-		ct[2] -= c.ks[d/4][2]
-		ct[3] -= c.ks[d/4][3]
-		ct[4] -= c.ks[d/4][4]
-		ct[5] -= c.ks[d/4][5]
-		ct[6] -= c.ks[d/4][6]
-		ct[7] -= c.ks[d/4][7]
-		ct[8] -= c.ks[d/4][8]
-		ct[9] -= c.ks[d/4][9]
-		ct[10] -= c.ks[d/4][10]
-		ct[11] -= c.ks[d/4][11]
-		ct[12] -= c.ks[d/4][12]
-		ct[13] -= c.ks[d/4][13]
-		ct[14] -= c.ks[d/4][14]
-		ct[15] -= c.ks[d/4][15]
+		b0 -= c.ks[d/4][0]
+		b1 -= c.ks[d/4][1]
+		b2 -= c.ks[d/4][2]
+		b3 -= c.ks[d/4][3]
+		b4 -= c.ks[d/4][4]
+		b5 -= c.ks[d/4][5]
+		b6 -= c.ks[d/4][6]
+		b7 -= c.ks[d/4][7]
+		b8 -= c.ks[d/4][8]
+		b9 -= c.ks[d/4][9]
+		b10 -= c.ks[d/4][10]
+		b11 -= c.ks[d/4][11]
+		b12 -= c.ks[d/4][12]
+		b13 -= c.ks[d/4][13]
+		b14 -= c.ks[d/4][14]
+		b15 -= c.ks[d/4][15]
 
 		// Four rounds of permute and unmix
-		ct[1], ct[3], ct[4], ct[5], ct[6], ct[7], ct[8], ct[9], ct[10], ct[11], ct[12], ct[13], ct[14], ct[15] =
-			ct[15], ct[11], ct[6], ct[13], ct[4], ct[9], ct[14], ct[1], ct[8], ct[5], ct[10], ct[3], ct[12], ct[7]
-		ct[15] = bits.RotateLeft64(ct[15]^ct[14], -25)
-		ct[14] -= ct[15]
-		ct[13] = bits.RotateLeft64(ct[13]^ct[12], -16)
-		ct[12] -= ct[13]
-		ct[11] = bits.RotateLeft64(ct[11]^ct[10], -28)
-		ct[10] -= ct[11]
-		ct[9] = bits.RotateLeft64(ct[9]^ct[8], -47)
-		ct[8] -= ct[9]
-		ct[7] = bits.RotateLeft64(ct[7]^ct[6], -41)
-		ct[6] -= ct[7]
-		ct[5] = bits.RotateLeft64(ct[5]^ct[4], -48)
-		ct[4] -= ct[5]
-		ct[3] = bits.RotateLeft64(ct[3]^ct[2], -20)
-		ct[2] -= ct[3]
-		ct[1] = bits.RotateLeft64(ct[1]^ct[0], -5)
-		ct[0] -= ct[1]
+		b1, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15 =
+			b15, b11, b6, b13, b4, b9, b14, b1, b8, b5, b10, b3, b12, b7
+		b15 = bits.RotateLeft64(b15^b14, -25)
+		b14 -= b15
+		b13 = bits.RotateLeft64(b13^b12, -16)
+		b12 -= b13
+		b11 = bits.RotateLeft64(b11^b10, -28)
+		b10 -= b11
+		b9 = bits.RotateLeft64(b9^b8, -47)
+		b8 -= b9
+		b7 = bits.RotateLeft64(b7^b6, -41)
+		b6 -= b7
+		b5 = bits.RotateLeft64(b5^b4, -48)
+		b4 -= b5
+		b3 = bits.RotateLeft64(b3^b2, -20)
+		b2 -= b3
+		b1 = bits.RotateLeft64(b1^b0, -5)
+		b0 -= b1
 
-		ct[1], ct[3], ct[4], ct[5], ct[6], ct[7], ct[8], ct[9], ct[10], ct[11], ct[12], ct[13], ct[14], ct[15] =
-			ct[15], ct[11], ct[6], ct[13], ct[4], ct[9], ct[14], ct[1], ct[8], ct[5], ct[10], ct[3], ct[12], ct[7]
-		ct[15] = bits.RotateLeft64(ct[15]^ct[14], -17)
-		ct[14] -= ct[15]
-		ct[13] = bits.RotateLeft64(ct[13]^ct[12], -59)
-		ct[12] -= ct[13]
-		ct[11] = bits.RotateLeft64(ct[11]^ct[10], -41)
-		ct[10] -= ct[11]
-		ct[9] = bits.RotateLeft64(ct[9]^ct[8], -34)
-		ct[8] -= ct[9]
-		ct[7] = bits.RotateLeft64(ct[7]^ct[6], -13)
-		ct[6] -= ct[7]
-		ct[5] = bits.RotateLeft64(ct[5]^ct[4], -51)
-		ct[4] -= ct[5]
-		ct[3] = bits.RotateLeft64(ct[3]^ct[2], -4)
-		ct[2] -= ct[3]
-		ct[1] = bits.RotateLeft64(ct[1]^ct[0], -33)
-		ct[0] -= ct[1]
+		b1, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15 =
+			b15, b11, b6, b13, b4, b9, b14, b1, b8, b5, b10, b3, b12, b7
+		b15 = bits.RotateLeft64(b15^b14, -17)
+		b14 -= b15
+		b13 = bits.RotateLeft64(b13^b12, -59)
+		b12 -= b13
+		b11 = bits.RotateLeft64(b11^b10, -41)
+		b10 -= b11
+		b9 = bits.RotateLeft64(b9^b8, -34)
+		b8 -= b9
+		b7 = bits.RotateLeft64(b7^b6, -13)
+		b6 -= b7
+		b5 = bits.RotateLeft64(b5^b4, -51)
+		b4 -= b5
+		b3 = bits.RotateLeft64(b3^b2, -4)
+		b2 -= b3
+		b1 = bits.RotateLeft64(b1^b0, -33)
+		b0 -= b1
 
-		ct[1], ct[3], ct[4], ct[5], ct[6], ct[7], ct[8], ct[9], ct[10], ct[11], ct[12], ct[13], ct[14], ct[15] =
-			ct[15], ct[11], ct[6], ct[13], ct[4], ct[9], ct[14], ct[1], ct[8], ct[5], ct[10], ct[3], ct[12], ct[7]
-		ct[15] = bits.RotateLeft64(ct[15]^ct[14], -52)
-		ct[14] -= ct[15]
-		ct[13] = bits.RotateLeft64(ct[13]^ct[12], -23)
-		ct[12] -= ct[13]
-		ct[11] = bits.RotateLeft64(ct[11]^ct[10], -18)
-		ct[10] -= ct[11]
-		ct[9] = bits.RotateLeft64(ct[9]^ct[8], -49)
-		ct[8] -= ct[9]
-		ct[7] = bits.RotateLeft64(ct[7]^ct[6], -55)
-		ct[6] -= ct[7]
-		ct[5] = bits.RotateLeft64(ct[5]^ct[4], -10)
-		ct[4] -= ct[5]
-		ct[3] = bits.RotateLeft64(ct[3]^ct[2], -19)
-		ct[2] -= ct[3]
-		ct[1] = bits.RotateLeft64(ct[1]^ct[0], -38)
-		ct[0] -= ct[1]
+		b1, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15 =
+			b15, b11, b6, b13, b4, b9, b14, b1, b8, b5, b10, b3, b12, b7
+		b15 = bits.RotateLeft64(b15^b14, -52)
+		b14 -= b15
+		b13 = bits.RotateLeft64(b13^b12, -23)
+		b12 -= b13
+		b11 = bits.RotateLeft64(b11^b10, -18)
+		b10 -= b11
+		b9 = bits.RotateLeft64(b9^b8, -49)
+		b8 -= b9
+		b7 = bits.RotateLeft64(b7^b6, -55)
+		b6 -= b7
+		b5 = bits.RotateLeft64(b5^b4, -10)
+		b4 -= b5
+		b3 = bits.RotateLeft64(b3^b2, -19)
+		b2 -= b3
+		b1 = bits.RotateLeft64(b1^b0, -38)
+		b0 -= b1
 
-		ct[1], ct[3], ct[4], ct[5], ct[6], ct[7], ct[8], ct[9], ct[10], ct[11], ct[12], ct[13], ct[14], ct[15] =
-			ct[15], ct[11], ct[6], ct[13], ct[4], ct[9], ct[14], ct[1], ct[8], ct[5], ct[10], ct[3], ct[12], ct[7]
-		ct[15] = bits.RotateLeft64(ct[15]^ct[14], -37)
-		ct[14] -= ct[15]
-		ct[13] = bits.RotateLeft64(ct[13]^ct[12], -22)
-		ct[12] -= ct[13]
-		ct[11] = bits.RotateLeft64(ct[11]^ct[10], -17)
-		ct[10] -= ct[11]
-		ct[9] = bits.RotateLeft64(ct[9]^ct[8], -8)
-		ct[8] -= ct[9]
-		ct[7] = bits.RotateLeft64(ct[7]^ct[6], -47)
-		ct[6] -= ct[7]
-		ct[5] = bits.RotateLeft64(ct[5]^ct[4], -8)
-		ct[4] -= ct[5]
-		ct[3] = bits.RotateLeft64(ct[3]^ct[2], -13)
-		ct[2] -= ct[3]
-		ct[1] = bits.RotateLeft64(ct[1]^ct[0], -24)
-		ct[0] -= ct[1]
+		b1, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15 =
+			b15, b11, b6, b13, b4, b9, b14, b1, b8, b5, b10, b3, b12, b7
+		b15 = bits.RotateLeft64(b15^b14, -37)
+		b14 -= b15
+		b13 = bits.RotateLeft64(b13^b12, -22)
+		b12 -= b13
+		b11 = bits.RotateLeft64(b11^b10, -17)
+		b10 -= b11
+		b9 = bits.RotateLeft64(b9^b8, -8)
+		b8 -= b9
+		b7 = bits.RotateLeft64(b7^b6, -47)
+		b6 -= b7
+		b5 = bits.RotateLeft64(b5^b4, -8)
+		b4 -= b5
+		b3 = bits.RotateLeft64(b3^b2, -13)
+		b2 -= b3
+		b1 = bits.RotateLeft64(b1^b0, -24)
+		b0 -= b1
 
 		// Subtract round key
-		ct[0] -= c.ks[(d/4)-1][0]
-		ct[1] -= c.ks[(d/4)-1][1]
-		ct[2] -= c.ks[(d/4)-1][2]
-		ct[3] -= c.ks[(d/4)-1][3]
-		ct[4] -= c.ks[(d/4)-1][4]
-		ct[5] -= c.ks[(d/4)-1][5]
-		ct[6] -= c.ks[(d/4)-1][6]
-		ct[7] -= c.ks[(d/4)-1][7]
-		ct[8] -= c.ks[(d/4)-1][8]
-		ct[9] -= c.ks[(d/4)-1][9]
-		ct[10] -= c.ks[(d/4)-1][10]
-		ct[11] -= c.ks[(d/4)-1][11]
-		ct[12] -= c.ks[(d/4)-1][12]
-		ct[13] -= c.ks[(d/4)-1][13]
-		ct[14] -= c.ks[(d/4)-1][14]
-		ct[15] -= c.ks[(d/4)-1][15]
+		b0 -= c.ks[(d/4)-1][0]
+		b1 -= c.ks[(d/4)-1][1]
+		b2 -= c.ks[(d/4)-1][2]
+		b3 -= c.ks[(d/4)-1][3]
+		b4 -= c.ks[(d/4)-1][4]
+		b5 -= c.ks[(d/4)-1][5]
+		b6 -= c.ks[(d/4)-1][6]
+		b7 -= c.ks[(d/4)-1][7]
+		b8 -= c.ks[(d/4)-1][8]
+		b9 -= c.ks[(d/4)-1][9]
+		b10 -= c.ks[(d/4)-1][10]
+		b11 -= c.ks[(d/4)-1][11]
+		b12 -= c.ks[(d/4)-1][12]
+		b13 -= c.ks[(d/4)-1][13]
+		b14 -= c.ks[(d/4)-1][14]
+		b15 -= c.ks[(d/4)-1][15]
 	}
 
 	// Store decrypted value in destination
-	storeWord(dst[0:8], ct[0])
-	storeWord(dst[8:16], ct[1])
-	storeWord(dst[16:24], ct[2])
-	storeWord(dst[24:32], ct[3])
-	storeWord(dst[32:40], ct[4])
-	storeWord(dst[40:48], ct[5])
-	storeWord(dst[48:56], ct[6])
-	storeWord(dst[56:64], ct[7])
-	storeWord(dst[64:72], ct[8])
-	storeWord(dst[72:80], ct[9])
-	storeWord(dst[80:88], ct[10])
-	storeWord(dst[88:96], ct[11])
-	storeWord(dst[96:104], ct[12])
-	storeWord(dst[104:112], ct[13])
-	storeWord(dst[112:120], ct[14])
-	storeWord(dst[120:128], ct[15])
+	storeWord(dst[0:8], b0)
+	storeWord(dst[8:16], b1)
+	storeWord(dst[16:24], b2)
+	storeWord(dst[24:32], b3)
+	storeWord(dst[32:40], b4)
+	storeWord(dst[40:48], b5)
+	storeWord(dst[48:56], b6)
+	storeWord(dst[56:64], b7)
+	storeWord(dst[64:72], b8)
+	storeWord(dst[72:80], b9)
+	storeWord(dst[80:88], b10)
+	storeWord(dst[88:96], b11)
+	storeWord(dst[96:104], b12)
+	storeWord(dst[104:112], b13)
+	storeWord(dst[112:120], b14)
+	storeWord(dst[120:128], b15)
 }
