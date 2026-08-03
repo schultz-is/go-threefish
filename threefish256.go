@@ -2,6 +2,7 @@ package threefish
 
 import (
 	"crypto/cipher"
+	"math/bits"
 )
 
 const (
@@ -93,27 +94,27 @@ func (c *cipher256) Encrypt(dst, src []byte) {
 
 		// Four rounds of mix and permute
 		in[0] += in[1]
-		in[1] = ((in[1] << 14) | (in[1] >> (64 - 14))) ^ in[0]
+		in[1] = bits.RotateLeft64(in[1], 14) ^ in[0]
 		in[2] += in[3]
-		in[3] = ((in[3] << 16) | (in[3] >> (64 - 16))) ^ in[2]
+		in[3] = bits.RotateLeft64(in[3], 16) ^ in[2]
 		in[1], in[3] = in[3], in[1]
 
 		in[0] += in[1]
-		in[1] = ((in[1] << 52) | (in[1] >> (64 - 52))) ^ in[0]
+		in[1] = bits.RotateLeft64(in[1], 52) ^ in[0]
 		in[2] += in[3]
-		in[3] = ((in[3] << 57) | (in[3] >> (64 - 57))) ^ in[2]
+		in[3] = bits.RotateLeft64(in[3], 57) ^ in[2]
 		in[1], in[3] = in[3], in[1]
 
 		in[0] += in[1]
-		in[1] = ((in[1] << 23) | (in[1] >> (64 - 23))) ^ in[0]
+		in[1] = bits.RotateLeft64(in[1], 23) ^ in[0]
 		in[2] += in[3]
-		in[3] = ((in[3] << 40) | (in[3] >> (64 - 40))) ^ in[2]
+		in[3] = bits.RotateLeft64(in[3], 40) ^ in[2]
 		in[1], in[3] = in[3], in[1]
 
 		in[0] += in[1]
-		in[1] = ((in[1] << 5) | (in[1] >> (64 - 5))) ^ in[0]
+		in[1] = bits.RotateLeft64(in[1], 5) ^ in[0]
 		in[2] += in[3]
-		in[3] = ((in[3] << 37) | (in[3] >> (64 - 37))) ^ in[2]
+		in[3] = bits.RotateLeft64(in[3], 37) ^ in[2]
 		in[1], in[3] = in[3], in[1]
 
 		// Add round key
@@ -124,27 +125,27 @@ func (c *cipher256) Encrypt(dst, src []byte) {
 
 		// Four rounds of mix and permute
 		in[0] += in[1]
-		in[1] = ((in[1] << 25) | (in[1] >> (64 - 25))) ^ in[0]
+		in[1] = bits.RotateLeft64(in[1], 25) ^ in[0]
 		in[2] += in[3]
-		in[3] = ((in[3] << 33) | (in[3] >> (64 - 33))) ^ in[2]
+		in[3] = bits.RotateLeft64(in[3], 33) ^ in[2]
 		in[1], in[3] = in[3], in[1]
 
 		in[0] += in[1]
-		in[1] = ((in[1] << 46) | (in[1] >> (64 - 46))) ^ in[0]
+		in[1] = bits.RotateLeft64(in[1], 46) ^ in[0]
 		in[2] += in[3]
-		in[3] = ((in[3] << 12) | (in[3] >> (64 - 12))) ^ in[2]
+		in[3] = bits.RotateLeft64(in[3], 12) ^ in[2]
 		in[1], in[3] = in[3], in[1]
 
 		in[0] += in[1]
-		in[1] = ((in[1] << 58) | (in[1] >> (64 - 58))) ^ in[0]
+		in[1] = bits.RotateLeft64(in[1], 58) ^ in[0]
 		in[2] += in[3]
-		in[3] = ((in[3] << 22) | (in[3] >> (64 - 22))) ^ in[2]
+		in[3] = bits.RotateLeft64(in[3], 22) ^ in[2]
 		in[1], in[3] = in[3], in[1]
 
 		in[0] += in[1]
-		in[1] = ((in[1] << 32) | (in[1] >> (64 - 32))) ^ in[0]
+		in[1] = bits.RotateLeft64(in[1], 32) ^ in[0]
 		in[2] += in[3]
-		in[3] = ((in[3] << 32) | (in[3] >> (64 - 32))) ^ in[2]
+		in[3] = bits.RotateLeft64(in[3], 32) ^ in[2]
 		in[1], in[3] = in[3], in[1]
 	}
 
@@ -190,27 +191,27 @@ func (c *cipher256) Decrypt(dst, src []byte) {
 	for d := numRounds256 - 1; d >= 0; d -= 8 {
 		// Four rounds of permute and unmix
 		ct[1], ct[3] = ct[3], ct[1]
-		ct[3] = ((ct[3] ^ ct[2]) << (64 - 32)) | ((ct[3] ^ ct[2]) >> 32)
+		ct[3] = bits.RotateLeft64(ct[3]^ct[2], -32)
 		ct[2] -= ct[3]
-		ct[1] = ((ct[1] ^ ct[0]) << (64 - 32)) | ((ct[1] ^ ct[0]) >> 32)
+		ct[1] = bits.RotateLeft64(ct[1]^ct[0], -32)
 		ct[0] -= ct[1]
 
 		ct[1], ct[3] = ct[3], ct[1]
-		ct[3] = ((ct[3] ^ ct[2]) << (64 - 22)) | ((ct[3] ^ ct[2]) >> 22)
+		ct[3] = bits.RotateLeft64(ct[3]^ct[2], -22)
 		ct[2] -= ct[3]
-		ct[1] = ((ct[1] ^ ct[0]) << (64 - 58)) | ((ct[1] ^ ct[0]) >> 58)
+		ct[1] = bits.RotateLeft64(ct[1]^ct[0], -58)
 		ct[0] -= ct[1]
 
 		ct[1], ct[3] = ct[3], ct[1]
-		ct[3] = ((ct[3] ^ ct[2]) << (64 - 12)) | ((ct[3] ^ ct[2]) >> 12)
+		ct[3] = bits.RotateLeft64(ct[3]^ct[2], -12)
 		ct[2] -= ct[3]
-		ct[1] = ((ct[1] ^ ct[0]) << (64 - 46)) | ((ct[1] ^ ct[0]) >> 46)
+		ct[1] = bits.RotateLeft64(ct[1]^ct[0], -46)
 		ct[0] -= ct[1]
 
 		ct[1], ct[3] = ct[3], ct[1]
-		ct[3] = ((ct[3] ^ ct[2]) << (64 - 33)) | ((ct[3] ^ ct[2]) >> 33)
+		ct[3] = bits.RotateLeft64(ct[3]^ct[2], -33)
 		ct[2] -= ct[3]
-		ct[1] = ((ct[1] ^ ct[0]) << (64 - 25)) | ((ct[1] ^ ct[0]) >> 25)
+		ct[1] = bits.RotateLeft64(ct[1]^ct[0], -25)
 		ct[0] -= ct[1]
 
 		// Subtract round key
@@ -221,27 +222,27 @@ func (c *cipher256) Decrypt(dst, src []byte) {
 
 		// Four rounds of permute and unmix
 		ct[1], ct[3] = ct[3], ct[1]
-		ct[3] = ((ct[3] ^ ct[2]) << (64 - 37)) | ((ct[3] ^ ct[2]) >> 37)
+		ct[3] = bits.RotateLeft64(ct[3]^ct[2], -37)
 		ct[2] -= ct[3]
-		ct[1] = ((ct[1] ^ ct[0]) << (64 - 5)) | ((ct[1] ^ ct[0]) >> 5)
+		ct[1] = bits.RotateLeft64(ct[1]^ct[0], -5)
 		ct[0] -= ct[1]
 
 		ct[1], ct[3] = ct[3], ct[1]
-		ct[3] = ((ct[3] ^ ct[2]) << (64 - 40)) | ((ct[3] ^ ct[2]) >> 40)
+		ct[3] = bits.RotateLeft64(ct[3]^ct[2], -40)
 		ct[2] -= ct[3]
-		ct[1] = ((ct[1] ^ ct[0]) << (64 - 23)) | ((ct[1] ^ ct[0]) >> 23)
+		ct[1] = bits.RotateLeft64(ct[1]^ct[0], -23)
 		ct[0] -= ct[1]
 
 		ct[1], ct[3] = ct[3], ct[1]
-		ct[3] = ((ct[3] ^ ct[2]) << (64 - 57)) | ((ct[3] ^ ct[2]) >> 57)
+		ct[3] = bits.RotateLeft64(ct[3]^ct[2], -57)
 		ct[2] -= ct[3]
-		ct[1] = ((ct[1] ^ ct[0]) << (64 - 52)) | ((ct[1] ^ ct[0]) >> 52)
+		ct[1] = bits.RotateLeft64(ct[1]^ct[0], -52)
 		ct[0] -= ct[1]
 
 		ct[1], ct[3] = ct[3], ct[1]
-		ct[3] = ((ct[3] ^ ct[2]) << (64 - 16)) | ((ct[3] ^ ct[2]) >> 16)
+		ct[3] = bits.RotateLeft64(ct[3]^ct[2], -16)
 		ct[2] -= ct[3]
-		ct[1] = ((ct[1] ^ ct[0]) << (64 - 14)) | ((ct[1] ^ ct[0]) >> 14)
+		ct[1] = bits.RotateLeft64(ct[1]^ct[0], -14)
 		ct[0] -= ct[1]
 
 		// Subtract round key
