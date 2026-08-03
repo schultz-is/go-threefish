@@ -2,6 +2,7 @@ package threefish
 
 import (
 	"crypto/cipher"
+	"encoding/binary"
 	"math/bits"
 )
 
@@ -20,6 +21,8 @@ type cipher1024 struct {
 	t  [(tweakSize / 8) + 1]uint64
 	ks [(numRounds1024 / 4) + 1][numWords1024]uint64
 }
+
+var _ cipher.Block = (*cipher1024)(nil)
 
 // New1024 creates a new Threefish cipher with a block size of 1024 bits.
 // The key argument must be 128 bytes and the tweak argument must be 16 bytes.
@@ -40,7 +43,7 @@ func New1024(key, tweak []byte) (cipher.Block, error) {
 	k := new([numWords1024 + 1]uint64)
 	k[numWords1024] = c240
 	for i := 0; i < numWords1024; i++ {
-		k[i] = loadWord(key[i*8 : (i+1)*8])
+		k[i] = binary.LittleEndian.Uint64(key[i*8 : (i+1)*8])
 		k[numWords1024] ^= k[i]
 	}
 
@@ -79,22 +82,22 @@ func (c *cipher1024) Encrypt(dst, src []byte) {
 
 	// Load the input
 	var b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15 uint64
-	b0 = loadWord(src[0:8])
-	b1 = loadWord(src[8:16])
-	b2 = loadWord(src[16:24])
-	b3 = loadWord(src[24:32])
-	b4 = loadWord(src[32:40])
-	b5 = loadWord(src[40:48])
-	b6 = loadWord(src[48:56])
-	b7 = loadWord(src[56:64])
-	b8 = loadWord(src[64:72])
-	b9 = loadWord(src[72:80])
-	b10 = loadWord(src[80:88])
-	b11 = loadWord(src[88:96])
-	b12 = loadWord(src[96:104])
-	b13 = loadWord(src[104:112])
-	b14 = loadWord(src[112:120])
-	b15 = loadWord(src[120:128])
+	b0 = binary.LittleEndian.Uint64(src[0:8])
+	b1 = binary.LittleEndian.Uint64(src[8:16])
+	b2 = binary.LittleEndian.Uint64(src[16:24])
+	b3 = binary.LittleEndian.Uint64(src[24:32])
+	b4 = binary.LittleEndian.Uint64(src[32:40])
+	b5 = binary.LittleEndian.Uint64(src[40:48])
+	b6 = binary.LittleEndian.Uint64(src[48:56])
+	b7 = binary.LittleEndian.Uint64(src[56:64])
+	b8 = binary.LittleEndian.Uint64(src[64:72])
+	b9 = binary.LittleEndian.Uint64(src[72:80])
+	b10 = binary.LittleEndian.Uint64(src[80:88])
+	b11 = binary.LittleEndian.Uint64(src[88:96])
+	b12 = binary.LittleEndian.Uint64(src[96:104])
+	b13 = binary.LittleEndian.Uint64(src[104:112])
+	b14 = binary.LittleEndian.Uint64(src[112:120])
+	b15 = binary.LittleEndian.Uint64(src[120:128])
 
 	// Perform encryption rounds
 	for d := 0; d < numRounds1024; d += 8 {
@@ -308,22 +311,22 @@ func (c *cipher1024) Encrypt(dst, src []byte) {
 	b15 += c.ks[numRounds1024/4][15]
 
 	// Store the ciphertext in destination
-	storeWord(dst[0:8], b0)
-	storeWord(dst[8:16], b1)
-	storeWord(dst[16:24], b2)
-	storeWord(dst[24:32], b3)
-	storeWord(dst[32:40], b4)
-	storeWord(dst[40:48], b5)
-	storeWord(dst[48:56], b6)
-	storeWord(dst[56:64], b7)
-	storeWord(dst[64:72], b8)
-	storeWord(dst[72:80], b9)
-	storeWord(dst[80:88], b10)
-	storeWord(dst[88:96], b11)
-	storeWord(dst[96:104], b12)
-	storeWord(dst[104:112], b13)
-	storeWord(dst[112:120], b14)
-	storeWord(dst[120:128], b15)
+	binary.LittleEndian.PutUint64(dst[0:8], b0)
+	binary.LittleEndian.PutUint64(dst[8:16], b1)
+	binary.LittleEndian.PutUint64(dst[16:24], b2)
+	binary.LittleEndian.PutUint64(dst[24:32], b3)
+	binary.LittleEndian.PutUint64(dst[32:40], b4)
+	binary.LittleEndian.PutUint64(dst[40:48], b5)
+	binary.LittleEndian.PutUint64(dst[48:56], b6)
+	binary.LittleEndian.PutUint64(dst[56:64], b7)
+	binary.LittleEndian.PutUint64(dst[64:72], b8)
+	binary.LittleEndian.PutUint64(dst[72:80], b9)
+	binary.LittleEndian.PutUint64(dst[80:88], b10)
+	binary.LittleEndian.PutUint64(dst[88:96], b11)
+	binary.LittleEndian.PutUint64(dst[96:104], b12)
+	binary.LittleEndian.PutUint64(dst[104:112], b13)
+	binary.LittleEndian.PutUint64(dst[112:120], b14)
+	binary.LittleEndian.PutUint64(dst[120:128], b15)
 }
 
 // Decrypt loads ciphertext from src, decrypts it, and stores it in dst.
@@ -340,22 +343,22 @@ func (c *cipher1024) Decrypt(dst, src []byte) {
 
 	// Load the ciphertext
 	var b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15 uint64
-	b0 = loadWord(src[0:8])
-	b1 = loadWord(src[8:16])
-	b2 = loadWord(src[16:24])
-	b3 = loadWord(src[24:32])
-	b4 = loadWord(src[32:40])
-	b5 = loadWord(src[40:48])
-	b6 = loadWord(src[48:56])
-	b7 = loadWord(src[56:64])
-	b8 = loadWord(src[64:72])
-	b9 = loadWord(src[72:80])
-	b10 = loadWord(src[80:88])
-	b11 = loadWord(src[88:96])
-	b12 = loadWord(src[96:104])
-	b13 = loadWord(src[104:112])
-	b14 = loadWord(src[112:120])
-	b15 = loadWord(src[120:128])
+	b0 = binary.LittleEndian.Uint64(src[0:8])
+	b1 = binary.LittleEndian.Uint64(src[8:16])
+	b2 = binary.LittleEndian.Uint64(src[16:24])
+	b3 = binary.LittleEndian.Uint64(src[24:32])
+	b4 = binary.LittleEndian.Uint64(src[32:40])
+	b5 = binary.LittleEndian.Uint64(src[40:48])
+	b6 = binary.LittleEndian.Uint64(src[48:56])
+	b7 = binary.LittleEndian.Uint64(src[56:64])
+	b8 = binary.LittleEndian.Uint64(src[64:72])
+	b9 = binary.LittleEndian.Uint64(src[72:80])
+	b10 = binary.LittleEndian.Uint64(src[80:88])
+	b11 = binary.LittleEndian.Uint64(src[88:96])
+	b12 = binary.LittleEndian.Uint64(src[96:104])
+	b13 = binary.LittleEndian.Uint64(src[104:112])
+	b14 = binary.LittleEndian.Uint64(src[112:120])
+	b15 = binary.LittleEndian.Uint64(src[120:128])
 
 	// Subtract the final round key
 	b0 -= c.ks[numRounds1024/4][0]
@@ -569,20 +572,20 @@ func (c *cipher1024) Decrypt(dst, src []byte) {
 	}
 
 	// Store decrypted value in destination
-	storeWord(dst[0:8], b0)
-	storeWord(dst[8:16], b1)
-	storeWord(dst[16:24], b2)
-	storeWord(dst[24:32], b3)
-	storeWord(dst[32:40], b4)
-	storeWord(dst[40:48], b5)
-	storeWord(dst[48:56], b6)
-	storeWord(dst[56:64], b7)
-	storeWord(dst[64:72], b8)
-	storeWord(dst[72:80], b9)
-	storeWord(dst[80:88], b10)
-	storeWord(dst[88:96], b11)
-	storeWord(dst[96:104], b12)
-	storeWord(dst[104:112], b13)
-	storeWord(dst[112:120], b14)
-	storeWord(dst[120:128], b15)
+	binary.LittleEndian.PutUint64(dst[0:8], b0)
+	binary.LittleEndian.PutUint64(dst[8:16], b1)
+	binary.LittleEndian.PutUint64(dst[16:24], b2)
+	binary.LittleEndian.PutUint64(dst[24:32], b3)
+	binary.LittleEndian.PutUint64(dst[32:40], b4)
+	binary.LittleEndian.PutUint64(dst[40:48], b5)
+	binary.LittleEndian.PutUint64(dst[48:56], b6)
+	binary.LittleEndian.PutUint64(dst[56:64], b7)
+	binary.LittleEndian.PutUint64(dst[64:72], b8)
+	binary.LittleEndian.PutUint64(dst[72:80], b9)
+	binary.LittleEndian.PutUint64(dst[80:88], b10)
+	binary.LittleEndian.PutUint64(dst[88:96], b11)
+	binary.LittleEndian.PutUint64(dst[96:104], b12)
+	binary.LittleEndian.PutUint64(dst[104:112], b13)
+	binary.LittleEndian.PutUint64(dst[112:120], b14)
+	binary.LittleEndian.PutUint64(dst[120:128], b15)
 }
