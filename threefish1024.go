@@ -22,7 +22,7 @@ type cipher1024 struct {
 }
 
 // New1024 creates a new Threefish cipher with a block size of 1024 bits.
-// The key argument must be 64 bytes and the tweak argument must be 16 bytes.
+// The key argument must be 128 bytes and the tweak argument must be 16 bytes.
 func New1024(key, tweak []byte) (cipher.Block, error) {
 	// Length check the provided key
 	if len(key) != blockSize1024 {

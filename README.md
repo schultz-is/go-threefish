@@ -2,7 +2,6 @@
 
 ![Tests](https://github.com/schultz-is/go-threefish/workflows/Tests/badge.svg)
 [![GoDoc](https://godoc.org/github.com/schultz-is/go-threefish?status.svg)](https://pkg.go.dev/github.com/schultz-is/go-threefish)
-[![Go Report Card](https://goreportcard.com/badge/github.com/schultz-is/go-threefish)](https://goreportcard.com/report/github.com/schultz-is/go-threefish)
 [![License](https://img.shields.io/github/license/schultz-is/go-threefish)](./LICENSE)
 
 Threefish is a tweakable block cipher that was developed as part of the Skein
@@ -33,7 +32,7 @@ go get -U github.com/schultz-is/go-threefish
 
 The cipher implementations in this package fulfill the `crypto/cipher`
 `cipher.Block` interface. Instances returned by this library can be used with
-any block ciphers modes that support 256, 512, or 1024-bit block sizes.
+any block cipher modes that support 256, 512, or 1024-bit block sizes.
 
 ```go
 package main
@@ -60,7 +59,7 @@ func main() {
 
 	// Assign a tweak value. This allows customization of the block cipher as in
 	// the UBI block chaining mode. Support for the tweak value is not available
-	// in the block ciphers modes supported by the standard library.
+	// in the block cipher modes supported by the standard library.
 	tweak := make([]byte, 16)
 	_, err = rand.Read(tweak)
 	if err != nil {
