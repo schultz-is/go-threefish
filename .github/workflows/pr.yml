@@ -15,10 +15,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v7
+
+      - name: Set up go
+        uses: actions/setup-go@v7
+        with:
+          go-version: '1.26'
+          cache: false
 
       - name: Lint code
-        uses: golangci/golangci-lint-action@v2
+        uses: golangci/golangci-lint-action@v9
 
   # Unit testing
   unit-tests:
@@ -26,15 +32,16 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        go: ['1.14', '1.15', '1.16', '1.17']
+        go: ['1.25', '1.26']
     steps:
       - name: Set up go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v7
         with:
           go-version: ${{ matrix.go }}
+          cache: false
 
       - name: Check out code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v7
 
       - name: Run unit tests
         run: make test
