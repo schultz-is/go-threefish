@@ -2,6 +2,7 @@ package threefish
 
 import (
 	"crypto/cipher"
+	"encoding/binary"
 	"math/bits"
 )
 
@@ -20,6 +21,8 @@ type cipher256 struct {
 	t  [(tweakSize / 8) + 1]uint64
 	ks [(numRounds256 / 4) + 1][numWords256]uint64
 }
+
+var _ cipher.Block = (*cipher256)(nil)
 
 // New256 creates a new Threefish cipher with a block size of 256 bits.
 // The key argument must be 32 bytes and the tweak argument must be 16 bytes.
@@ -40,7 +43,7 @@ func New256(key, tweak []byte) (cipher.Block, error) {
 	k := new([numWords256 + 1]uint64)
 	k[numWords256] = c240
 	for i := 0; i < numWords256; i++ {
-		k[i] = loadWord(key[i*8 : (i+1)*8])
+		k[i] = binary.LittleEndian.Uint64(key[i*8 : (i+1)*8])
 		k[numWords256] ^= k[i]
 	}
 
@@ -79,10 +82,10 @@ func (c *cipher256) Encrypt(dst, src []byte) {
 
 	// Load the input
 	var b0, b1, b2, b3 uint64
-	b0 = loadWord(src[0:8])
-	b1 = loadWord(src[8:16])
-	b2 = loadWord(src[16:24])
-	b3 = loadWord(src[24:32])
+	b0 = binary.LittleEndian.Uint64(src[0:8])
+	b1 = binary.LittleEndian.Uint64(src[8:16])
+	b2 = binary.LittleEndian.Uint64(src[16:24])
+	b3 = binary.LittleEndian.Uint64(src[24:32])
 
 	// Perform encryption rounds
 	for d := 0; d < numRounds256; d += 8 {
@@ -156,10 +159,10 @@ func (c *cipher256) Encrypt(dst, src []byte) {
 	b3 += c.ks[numRounds256/4][3]
 
 	// Store ciphertext in destination
-	storeWord(dst[0:8], b0)
-	storeWord(dst[8:16], b1)
-	storeWord(dst[16:24], b2)
-	storeWord(dst[24:32], b3)
+	binary.LittleEndian.PutUint64(dst[0:8], b0)
+	binary.LittleEndian.PutUint64(dst[8:16], b1)
+	binary.LittleEndian.PutUint64(dst[16:24], b2)
+	binary.LittleEndian.PutUint64(dst[24:32], b3)
 }
 
 // Decrypt loads ciphertext from src, decrypts it, and stores it in dst.
@@ -176,10 +179,10 @@ func (c *cipher256) Decrypt(dst, src []byte) {
 
 	// Load the ciphertext
 	var b0, b1, b2, b3 uint64
-	b0 = loadWord(src[0:8])
-	b1 = loadWord(src[8:16])
-	b2 = loadWord(src[16:24])
-	b3 = loadWord(src[24:32])
+	b0 = binary.LittleEndian.Uint64(src[0:8])
+	b1 = binary.LittleEndian.Uint64(src[8:16])
+	b2 = binary.LittleEndian.Uint64(src[16:24])
+	b3 = binary.LittleEndian.Uint64(src[24:32])
 
 	// Subtract the final round key
 	b0 -= c.ks[numRounds256/4][0]
@@ -253,8 +256,8 @@ func (c *cipher256) Decrypt(dst, src []byte) {
 	}
 
 	// Store decrypted value in destination
-	storeWord(dst[0:8], b0)
-	storeWord(dst[8:16], b1)
-	storeWord(dst[16:24], b2)
-	storeWord(dst[24:32], b3)
+	binary.LittleEndian.PutUint64(dst[0:8], b0)
+	binary.LittleEndian.PutUint64(dst[8:16], b1)
+	binary.LittleEndian.PutUint64(dst[16:24], b2)
+	binary.LittleEndian.PutUint64(dst[24:32], b3)
 }

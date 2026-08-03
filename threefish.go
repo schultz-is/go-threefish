@@ -31,12 +31,6 @@ const (
 	c240 uint64 = 0x1bd11bdaa9fc1a22
 )
 
-// Aliases to help produce concise code
-var (
-	loadWord  = binary.LittleEndian.Uint64
-	storeWord = binary.LittleEndian.PutUint64
-)
-
 // A KeySizeError is returned when the provided key isn't the correct size.
 type KeySizeError int
 
@@ -59,8 +53,8 @@ func calculateTweak(dst *[(tweakSize / 8) + 1]uint64, src []byte) error {
 		return TweakSizeError{}
 	}
 
-	dst[0] = loadWord(src[0:8])
-	dst[1] = loadWord(src[8:16])
+	dst[0] = binary.LittleEndian.Uint64(src[0:8])
+	dst[1] = binary.LittleEndian.Uint64(src[8:16])
 	dst[2] = dst[0] ^ dst[1]
 
 	return nil
