@@ -1,7 +1,7 @@
 # go-threefish
 
-![Tests](https://github.com/schultz-is/go-threefish/workflows/Tests/badge.svg)
-[![GoDoc](https://godoc.org/github.com/schultz-is/go-threefish?status.svg)](https://pkg.go.dev/github.com/schultz-is/go-threefish)
+[![Tests](https://github.com/schultz-is/go-threefish/actions/workflows/pr.yml/badge.svg)](https://github.com/schultz-is/go-threefish/actions/workflows/pr.yml)
+[![Go Reference](https://pkg.go.dev/badge/github.com/schultz-is/go-threefish.svg)](https://pkg.go.dev/github.com/schultz-is/go-threefish)
 [![License](https://img.shields.io/github/license/schultz-is/go-threefish)](./LICENSE)
 
 Threefish is a tweakable block cipher that was developed as part of the Skein
@@ -22,10 +22,10 @@ which also provides detailed performance information.
 
 ## Installation
 
-To install as a dependency in a go project:
+To install as a dependency in a Go project:
 
 ```console
-go get -U github.com/schultz-is/go-threefish
+go get github.com/schultz-is/go-threefish
 ```
 
 ## Usage
