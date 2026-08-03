@@ -1,0 +1,74 @@
+name: Benchmarks
+
+# Run on demand only: Actions tab -> Benchmarks -> Run workflow.
+on:
+  workflow_dispatch:
+    inputs:
+      compare_ref:
+        description: 'Optional git ref (branch, tag, or SHA) to compare the current ref against with benchstat. Leave blank to just report current numbers.'
+        required: false
+        default: ''
+
+jobs:
+  benchmark:
+    name: Benchmark (${{ matrix.runner }})
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        # Run on both amd64 and arm64 hosted runners; the two architectures
+        # have different general-purpose register counts, which materially
+        # affects these register-bound ARX ciphers.
+        runner: ['ubuntu-latest', 'ubuntu-24.04-arm']
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v7
+        with:
+          # Full history so an arbitrary compare_ref can be checked out.
+          fetch-depth: 0
+
+      - name: Set up go
+        uses: actions/setup-go@v7
+        with:
+          go-version: '1.26'
+          cache: false
+
+      - name: Install benchstat
+        run: |
+          go install golang.org/x/perf/cmd/benchstat@latest
+          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
+
+      - name: Run benchmarks
+        env:
+          COMPARE_REF: ${{ inputs.compare_ref }}
+        run: |
+          bench=(-run='^$' -bench=. -benchmem -count=6 ./...)
+
+          echo "==> benchmarking current ref ($(git rev-parse --short HEAD))"
+          go test "${bench[@]}" | tee "$RUNNER_TEMP/head.txt"
+
+          {
+            echo "### Benchmarks — ${{ matrix.runner }} ($(go env GOARCH), $(go version | awk '{print $3}'))"
+            echo
+            if [ -n "$COMPARE_REF" ]; then
+              # After fetch-depth:0, branches exist as remote-tracking refs, so
+              # prefer origin/<ref>; fall back to the ref verbatim for tags/SHAs.
+              if git rev-parse --verify --quiet "origin/$COMPARE_REF^{commit}" >/dev/null; then
+                base_ref="origin/$COMPARE_REF"
+              else
+                base_ref="$COMPARE_REF"
+              fi
+              echo "==> benchmarking compare ref ($COMPARE_REF -> $base_ref)" >&2
+              git checkout --quiet --detach "$base_ref"
+              go test "${bench[@]}" | tee "$RUNNER_TEMP/base.txt" >&2
+              echo "Comparison: \`$COMPARE_REF\` (base) → current ref"
+              echo
+              echo '```'
+              benchstat "$COMPARE_REF=$RUNNER_TEMP/base.txt" "current=$RUNNER_TEMP/head.txt"
+              echo '```'
+            else
+              echo '```'
+              benchstat "$RUNNER_TEMP/head.txt"
+              echo '```'
+            fi
+          } | tee -a "$GITHUB_STEP_SUMMARY"
