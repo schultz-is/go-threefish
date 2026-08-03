@@ -19,9 +19,9 @@ func TestThreefish512(t *testing.T) {
 			}
 			if err == nil {
 				t.Fatal("expected error to be non-nil")
-				if !errors.Is(err, KeySizeError(blockSize512)) {
-					t.Fatalf("error should be %s", KeySizeError(blockSize512))
-				}
+			}
+			if !errors.Is(err, KeySizeError(blockSize512)) {
+				t.Fatalf("error should be %s", KeySizeError(blockSize512))
 			}
 		},
 	)
@@ -38,9 +38,9 @@ func TestThreefish512(t *testing.T) {
 			}
 			if err == nil {
 				t.Fatal("expected error to be non-nil")
-				if !errors.Is(err, KeySizeError(blockSize512)) {
-					t.Fatalf("error should be %s", KeySizeError(blockSize512))
-				}
+			}
+			if !errors.Is(err, KeySizeError(blockSize512)) {
+				t.Fatalf("error should be %s", KeySizeError(blockSize512))
 			}
 		},
 	)
@@ -57,9 +57,9 @@ func TestThreefish512(t *testing.T) {
 			}
 			if err == nil {
 				t.Fatal("expected error to be non-nil")
-				if !errors.Is(err, new(TweakSizeError)) {
-					t.Fatalf("error should be %s", new(TweakSizeError))
-				}
+			}
+			if !errors.Is(err, TweakSizeError{}) {
+				t.Fatalf("error should be %s", TweakSizeError{})
 			}
 		},
 	)
@@ -76,9 +76,9 @@ func TestThreefish512(t *testing.T) {
 			}
 			if err == nil {
 				t.Fatal("expected error to be non-nil")
-				if !errors.Is(err, new(TweakSizeError)) {
-					t.Fatalf("error should be %s", new(TweakSizeError))
-				}
+			}
+			if !errors.Is(err, TweakSizeError{}) {
+				t.Fatalf("error should be %s", TweakSizeError{})
 			}
 		},
 	)
