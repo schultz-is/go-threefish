@@ -108,29 +108,3 @@ make benchmark
 go tool pprof cpu.prof
 go tool pprof mem.prof
 ```
-
-## Performance
-
-### 2020 Mac Mini M1
-
-```console
-name                      time/op  speed
-Threefish256/encrypt-8     85 ns   372 MB/s
-Threefish256/decrypt-8    111 ns   287 MB/s
-Threefish512/encrypt-8    234 ns   272 MB/s
-Threefish512/decrypt-8    363 ns   175 MB/s
-Threefish1024/encrypt-8   581 ns   220 MB/s
-Threefish1024/decrypt-8   685 ns   186 MB/s
-```
-
-### 2019 MacBook Pro 2.3GHz Intel i9
-
-```console
-name                      time/op  speed
-Threefish256/encrypt-16   124 ns   259 MB/s
-Threefish256/decrypt-16   156 ns   206 MB/s
-Threefish512/encrypt-16   338 ns   189 MB/s
-Threefish512/decrypt-16   310 ns   206 MB/s
-Threefish1024/encrypt-16  804 ns   159 MB/s
-Threefish1024/decrypt-16  778 ns   165 MB/s
-```
