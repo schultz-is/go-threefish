@@ -1,3 +1,3 @@
 module github.com/schultz-is/go-threefish
 
-go 1.14
+go 1.25
