@@ -55,7 +55,7 @@ func (e TweakSizeError) Error() string {
 // calculateTweak loads a tweak value from src and extends it into dst.
 func calculateTweak(dst *[(tweakSize / 8) + 1]uint64, src []byte) error {
 	if len(src) != tweakSize {
-		return new(TweakSizeError)
+		return TweakSizeError{}
 	}
 
 	dst[0] = loadWord(src[0:8])
