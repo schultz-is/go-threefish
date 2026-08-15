@@ -42,14 +42,14 @@ func New256(key, tweak []byte) (cipher.Block, error) {
 	// Load and extend key
 	k := new([numWords256 + 1]uint64)
 	k[numWords256] = c240
-	for i := 0; i < numWords256; i++ {
+	for i := range numWords256 {
 		k[i] = binary.LittleEndian.Uint64(key[i*8 : (i+1)*8])
 		k[numWords256] ^= k[i]
 	}
 
 	// Calculate the key schedule
 	for s := 0; s <= numRounds256/4; s++ {
-		for i := 0; i < numWords256; i++ {
+		for i := range numWords256 {
 			c.ks[s][i] = k[(s+i)%(numWords256+1)]
 			switch i {
 			case numWords256 - 3:

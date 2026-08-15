@@ -42,14 +42,14 @@ func New1024(key, tweak []byte) (cipher.Block, error) {
 	// Load and extend the key
 	k := new([numWords1024 + 1]uint64)
 	k[numWords1024] = c240
-	for i := 0; i < numWords1024; i++ {
+	for i := range numWords1024 {
 		k[i] = binary.LittleEndian.Uint64(key[i*8 : (i+1)*8])
 		k[numWords1024] ^= k[i]
 	}
 
 	// Calculate the key schedule
 	for s := 0; s <= numRounds1024/4; s++ {
-		for i := 0; i < numWords1024; i++ {
+		for i := range numWords1024 {
 			c.ks[s][i] = k[(s+i)%(numWords1024+1)]
 			switch i {
 			case numWords1024 - 3:
